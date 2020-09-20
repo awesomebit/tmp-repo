@@ -1,0 +1,672 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Lesson 2: Transport and Application Layers</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="0619ad27-680a-49fc-86ac-c8db779c492f" class="page sans"><header><h1 class="page-title">Lesson 2: Transport and Application Layers</h1></header><div class="page-body"><nav id="22d54e2c-d5e2-427c-8b87-c95c0c7a4e36" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f4da6999-3e87-435e-b13f-78663c4889f5">Lesson 2 Introduction</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3bdfff61-b1be-4bbc-96dc-c1c392475a03">Introduction to Transport Layer and the Relationship between Transport and Network Layer</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d8f3cc4a-8c73-4809-960c-c849cae6f4bf">Multiplexing: why we need it?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#198e3a77-409c-4a86-ac13-6c550a6d2c81">Connection Oriented and Connectionless Multiplexing and Demultiplexing</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#2b9f74b4-6baa-401b-b45f-2d34402a048f">A word about the UDP protocol</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#431806f0-eab8-4b7a-b209-59385accdfa4">The TCP Three-Way Handshake</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9f3f7d5d-5075-4cc5-b6ae-52062b36b866"><strong>The TCP Three way Handshake:</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6fece94d-b918-44b3-8b26-e744e18f6211"><strong>Connection Teardown:</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5bff1781-6aec-46e9-908d-02c081fd2be2">Reliable Transmission</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#629db188-5634-4410-a3c8-2d9e7c981df2">Transmission Control</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#95bde266-f8b6-4d46-8e79-1865fe2ee552">Flow Control</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d9b1c030-1748-4de5-acc5-ca22a589a6d4">Congestion Control Introduction</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#246a4c2f-3716-47e6-b1a5-b0b6154eec94">What are the goals of congestion control?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3bc98693-87a9-45d7-bd21-0de39303439c">Congestion control flavors: E2E vs Network-assisted</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b66b4fb6-03ab-4989-b24d-464d0dc04dc7">How a host infers congestion? Signs of congestion</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5c078202-3657-42dd-b380-c3a22dbbdb39">How does a TCP sender limit the sending rate?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3b276112-d7ed-4f0a-bf68-97147ec0f125">Congestion control at TCP - AIMD</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#72ed34cc-a1ea-449d-bca7-95ce0f4c14d9"><strong>Additive Increase:</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b4ffcea5-1261-468d-9827-25f97649bcc3"><strong>Multiplicative Decrease:</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d823c617-7744-455a-8732-5c7247176cc2"><strong>Signals of congestion:</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ca0517e6-f7e3-4384-aea8-2e9a727e315e"><strong>Congestion window sawtooth pattern:</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f61a7924-bd03-44e7-95cc-314eac72ee94">Slow start in TCP</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5f64f70e-8166-47de-875b-25b228f2c90c">TCP Fairness</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#27ae9e62-8298-47a1-adbb-2e07c262f750">Caution about fairness</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#24b007f6-beb7-4df5-a156-8db2c5457a5b">Congestion Control in Modern Network Environments: TCP CUBIC</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d3f582a0-baca-4d7d-bf52-0ee611472d21">The TCP Protocol: TCP Throughput</a></div></nav><p id="93c9a5f1-869e-4a31-b97f-464a9bd64c82" class="">
+</p><h1 id="f4da6999-3e87-435e-b13f-78663c4889f5" class="block-color-pink">Lesson 2 Introduction</h1><p id="0476d9a3-d554-4b19-a8ca-f21f1d380dec" class="">In the second lecture, we are learning about the transport layer and mainly focusing on the TCP protocol.</p><p id="54803162-a976-433d-82ed-39dad773048b" class="">As a reminder, our overarching theme of the course is to have a clear understanding about it <mark class="highlight-red">what it takes for two hosts to exchange data</mark>. Let’s have two hosts that are in different networks and also physically located in different parts of the world. In this lecture, we are focusing on the <mark class="highlight-red">logical end-to-end connection between processes that are running on these two hosts</mark>. This logical connection is happening through the transport layer. <mark class="highlight-yellow_background">We will focus on the TCP protocol and we will learn about algorithms that provide important services such as reliability, flow control, and congestion control. </mark>We will also learn about <mark class="highlight-yellow_background">more recent versions of the TCP protocol that are designed for better performance, or they are designed to meet diverse requirements. </mark>For example, we know that traffic in datacenters can be originating from different applications. And <mark class="highlight-red">some applications may require predictable latency while others may require sustained throughput</mark>. The original TCP mechanisms were not designed with these goals in mind.</p><p id="c6640361-470a-49c8-8c00-25ef1840c41d" class="">
+</p><p id="323f1e91-8f0e-4130-a3c6-08be9956e6b5" class="">
+</p><h1 id="3bdfff61-b1be-4bbc-96dc-c1c392475a03" class="block-color-pink">Introduction to Transport Layer and the Relationship between Transport and Network Layer</h1><p id="e36d20ec-c73d-4877-a271-c75a6568e178" class=""><mark class="highlight-yellow_background">The transport layer provides an end-to-end connection between two applications that are running on different hosts</mark>. Of course the transport layer provides this logical connection regardless if the hosts are in the same network.</p><p id="d34116a2-ab9d-4aea-9baa-3f9dbf9c01e2" class="">Here is how it works; <mark class="highlight-yellow_background">The transport layer on the sender host receives a message from the application layer and it appends its own header</mark>. We refer to this combined message as a <mark class="highlight-red">segment</mark>. This transport layer segment is then sent to the network layer which will further append (encapsulate) this segment with its header information. Then it will send it to the receiving host via routers, bridges, switches etc.</p><p id="a2a0db0b-9822-4b23-8348-816462cd6434" class="">One might ask, why do we need an additional layer between the application and the network layer? <mark class="highlight-yellow_background">Recall, that the network-layer is based on a best effort delivery service model.</mark> According to this model, <mark class="highlight-red">the network layer makes a best effort to deliver data packets</mark>. <mark class="highlight-yellow_background">Thus, it doesn&#x27;t guarantee the delivery of packets, nor it guarantees integrity in data</mark>. <mark class="highlight-red">So, here is where the transport layer comes to offer some of these functionalities</mark>. This allows application programmers to develop applications assuming a standard set of functionalities that are provided by the transport layer. So the applications can run over diverse networks without having to worry about different network interfaces or possible unreliability of the network.</p><p id="7d69a631-1b26-454b-92c7-825a5a37d31b" class="">Within the transport layer, there are two main protocols: <mark class="highlight-yellow_background">User datagram protocol (UDP) and the Transmission Control Protocol (TCP)</mark>. These protocols differ based on the functionality they offer to the application developers; <mark class="highlight-yellow_background">UDP provides very basic functionality and relies on the application-layer to implement the remaining</mark>. On the other hand, <mark class="highlight-yellow_background">TCP provides some strong primitives with a goal to make end-to-end communication more reliable and cost-effective</mark>. In fact, because of these primitives, <mark class="highlight-red">TCP has become quite ubiquitous and is used for most of the applications today</mark>. We will now look at these functionalities in detail.</p><p id="96c22a12-321d-43e4-a7dd-b09fbb2e87e6" class="">
+</p><p id="0eb08a61-4539-45d6-967b-6c3c3642ee0b" class="">
+</p><h1 id="d8f3cc4a-8c73-4809-960c-c849cae6f4bf" class="block-color-pink">Multiplexing: why we need it?</h1><p id="6655df1f-abc9-4832-b52e-9a0c11fea11d" class="">One of the main desired functionalities of the transport layer is <mark class="highlight-yellow_background">the ability for a host to run multiple applications to use the network simultaneously; which we refer to as multiplexing.</mark></p><p id="6ea1c254-af17-481b-9287-7ce2f623a65e" class="">Let us consider a simple example to further illustrate why we need transport-layer multiplexing. Consider a user who is using Facebook while also listening to music on Spotify. Clearly, both of these processes involve communication to two different servers. How do we make sure that the incoming packets are delivered to the correct application? Note that, the network layer uses only the IP address and <mark class="highlight-red">an IP address alone does not say anything about which processes on the host should get the packets.</mark> Thus, we need an addressing mechanism to distinguish the many processes sharing the same IP address on the same host.</p><p id="10496410-7150-4cc9-8926-bd810f833571" class="">The transport layer solves this problem, <mark class="highlight-yellow_background">by using additional identifiers known as ports</mark>. <mark class="highlight-red">Each application binds itself to a unique port number by opening sockets and listening for any data from a remote application</mark>. Thus, the transport layer can do multiplexing by using ports.</p><p id="f23c6da3-e8b1-4b5a-a21a-b31b2be30ca3" class="">There are two ways in which we can use multiplexing. <mark class="highlight-yellow_background">Connectionless and connection oriented multiplexing.</mark> As the name suggests, it depends if we have a connection established between the sender and the receiver or not.</p><p id="577d33a8-9e8e-4eca-a9bf-644f8e2d1838" class="">In the next topic we are looking into multiplexing and demultiplexing.</p><p id="2ccd93f0-e311-4bec-84d5-f0a9077c7677" class="">
+</p><p id="c6058f0a-edaf-4e83-bdbc-601e0acca44a" class="">
+</p><h1 id="198e3a77-409c-4a86-ac13-6c550a6d2c81" class="block-color-pink">Connection Oriented and Connectionless Multiplexing and Demultiplexing</h1><p id="f667a56a-282b-4a34-9b54-3dec58e75c24" class="">In this topic, we will talk about multiplexing and demultiplexing.</p><figure id="f8fc61f5-3cb6-404f-a6ba-ad07f8220e80" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled.png"><img style="width:671px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled.png"/></a></figure><p id="6dbbf11d-5da4-45c8-bb43-cb17496a728a" class="">Let’s consider the scenario shown in the figure above which includes three hosts running an application. A receiving host that receives an incoming transport-layer segment will forward it to the appropriate socket. The receiving host identifies the appropriate socket by examining a set of fields in the segment.</p><p id="8c801ff0-b13d-4f3c-8222-a5869a63d8d7" class=""><mark class="highlight-red">The job of delivering the data that are included in a transport-layer segment to the appropriate socket, as defined in the segment fields</mark>, is called <mark class="highlight-yellow_background"><strong>demultiplexing</strong></mark>.</p><p id="37115542-d19a-4224-973a-7a4f689e8d20" class="">Similarly, the sending host will <mark class="highlight-red">need to gather data from different sockets, and encapsulate each data chunk with header information</mark> (that will later be used in demultiplexing) <mark class="highlight-red">to create segments</mark>, and then forward the segments to the network layer. We refer to this job as <mark class="highlight-yellow_background"><strong>multiplexing</strong></mark>.</p><p id="64657c36-2b97-4e07-9788-73b7ebe2173e" class="">As an example, let’s take a closer look at the host in the middle. The transport layer in the middle host, will need to demultiplex the data arriving from the network layer to the correct socket (P1 or P2). Also, the transport layer in the middle host, will need to perform multiplexing, by collecting the data from sockets P1 or P2, then by generating transport-layer segments, and then finally by forwarding these segments to the network layer below.</p><p id="8e207dd6-1747-4346-b8b3-a5c3f8bda6b7" class=""><mark class="highlight-teal_background"><strong>Now, let’s focus at the socket identifiers:</strong></mark> The sockets are identified based on special fields (shown below) in the segment such as the <strong>source port number field </strong>and the <strong>destination port number field.</strong></p><figure id="cf9305d9-7dfe-4c35-b6f2-406581944ead" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%201.png"><img style="width:666px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%201.png"/></a></figure><p id="3168d592-eab3-4f05-abd7-0d90cceb3004" class=""><mark class="highlight-teal_background"><strong>We have two flavors of multiplexing/demultiplexing:</strong></mark><strong> </strong>the connectionless and connection oriented.</p><figure id="2124f9ba-488b-45a1-8e2e-392be7fb5dd3" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%202.png"><img style="width:669px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%202.png"/></a></figure><p id="ac77ba29-a7af-4488-8e15-c1f0e0d4b2fc" class=""><mark class="highlight-teal_background"><strong>First, we will talk about the connectionless multiplexing and demultiplexing.</strong></mark><strong> </strong>The identifier of a <mark class="highlight-yellow_background">UDP socket is a two-tuple that is consisted of a destination IP address and a destination port number.</mark> Consider two hosts, A and B, which are running two processes at UDP ports a and b respectively. Let’s suppose that host A sends data to host B. The transport layer in host A creates transport layer segment by the application data, the source port and the destination port, and forwards the segment to the network layer. In turn the network layer encapsulates the segment into a network-layer datagram and sends it to host B with best effort delivery. Let’s suppose that the datagram is successfully received by host B. Then the transport layer at host B, identifies the correct socket by looking at the field of the destination port. In case that host B runs multiple processes, each process will have its own own UDP socket and therefore a distinct associated port number. Host B will use this information to demultiplex receiving data to the correct socket. <mark class="highlight-yellow_background">If Host B receives UDP segments with destination port number, it will forward the segments to the same destination process via the same destination socket, even if the segments are coming from different source hosts and/or different source port numbers.</mark></p><p id="af84994c-7d48-4948-b929-8f3026888acf" class=""><mark class="highlight-teal_background"><strong>Now let’s consider the connection oriented multiplexing and demultiplexing.</strong></mark></p><figure id="4759cae6-b15e-4fa7-b1cc-4401b816f4d0" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%203.png"><img style="width:671px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%203.png"/></a></figure><p id="46562245-53e9-492e-847a-d8905c6e7472" class=""><mark class="highlight-yellow_background">The identifier for a TCP socket is a four tuple that is consisted by the source IP, source port, destination IP and destination port. </mark>Let’s consider the example of a TCP client server as shown in the figure 2.29. The TCP server has a listening socket that waits for connections requests coming from TCP clients. A TCP client creates a socket and sends a connection request, which is a TCP segment that has a source port number chosen by the client, a destination port number 12000 and a special connection-establishment bit set in the TCP header. Finally, the TCP server receives the connection request, and the server creates a socket that is identified by the four-tuple source IP, source port, destination IP and destination port. The server uses this socket identifier to demultiplex incoming data and forward them to this socket. <mark class="highlight-yellow_background">Now, the TCP connection is established and the client and server can send and receive data between one another.</mark></p><p id="c4a14830-1875-4f33-ba0a-bb5c6f21f274" class=""><mark class="highlight-teal_background"><strong>Example: </strong></mark>Let&#x27;s look at an example connection establishment.</p><figure id="94ea0736-ba43-4f01-8fa3-323d2f07d46b" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%204.png"><img style="width:668px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%204.png"/></a></figure><p id="530295b2-5adc-44b1-9890-3612264160e5" class="">In this example, we have three hosts A, B and C. Host C and A initiate two and one HTTP sessions to server B, respectively. Hosts C and A assign port numbers to their connections independently of one another. Host C assigns port numbers 26145 and 7532. In case Host A assigns the same port number as C, <mark class="highlight-red">host B will still be able to demultiplex incoming data from the two connections because the connections are associated with different source IP addresses.</mark></p><p id="f3f61ca0-4388-4df4-aec2-9af9c043ae9b" class=""><mark class="highlight-teal_background"><strong>Let’s add a final note about web servers and persistent HTTP.</strong></mark><strong> </strong>Let&#x27;s assume, we have a webserver listening for connection requests at port 80. Clients send their initial connection requests and their subsequent data with destination port 80. <mark class="highlight-yellow_background">The webserver is able to demultiplex incoming data based on their unique source IP addresses and source port numbers</mark>. The client and the server maybe <mark class="highlight-red">persistent HTTP</mark>, in which case, they exchange HTTP messages via the same server socket. The client and the server maybe using <mark class="highlight-red">non-persistent HTTP</mark>, where for every request and response, a new TCP connection and a new socket are created and closed for every response/request. <mark class="highlight-red">In the second case, a busy webserver may experience severe performance impact</mark>.</p><p id="3665579a-339a-400e-983d-bbdf4fcfa399" class="">
+</p><p id="5cd77822-6821-4149-8272-1944390c569b" class="">
+</p><p id="b7cc4e3e-fe6b-464c-a680-54af35692008" class="">
+</p><h1 id="2b9f74b4-6baa-401b-b45f-2d34402a048f" class="block-color-pink">A word about the UDP protocol</h1><p id="c361a2a5-e071-427b-8b2f-a34341477a1d" class="">This lecture is primarily focused on TCP. Before exploring more topics on the TCP protocol let’s briefly talk about UDP.</p><p id="00ecb4c1-3166-4955-9b29-d078ff87c352" class="">UDP is: <mark class="highlight-red">a) an unreliable protocol as it lacks the mechanisms that TCP has in place</mark> and <mark class="highlight-red">b) a connectionless protocol that does not require the establishment of a connection </mark>(eg threeway handshake) before sending packets.</p><p id="c913d2f5-a05a-4dc5-9a74-ff553a3a2720" class="">The above description doesn’t sound so promising... so why do we have UDP at the first place? Well, it turns out that it is exactly the lack of those mechanisms that make UDP more desirable in some cases.</p><p id="67e63478-d05e-429f-b961-f0a396bbf307" class="">Specifically <mark class="highlight-yellow_background">UDP offers less delays and better control over sending data</mark> because with UDP we have:</p><ol id="b1ebe593-40fd-416b-85c0-7e56fa009775" class="numbered-list" start="1"><li><mark class="highlight-yellow_background"><strong>No congestion control or similar mechanisms.</strong></mark><strong> </strong>With UDP, as soon as the application passes data to the transport layer, then UDP encapsulates it and sends it over to the network layer. In contrast TCP “intervenes” a lot with sending the data e.g. with the congestion control mechanism or the retransmissions in case an ACK is not received. <mark class="highlight-red">These TCP mechanisms cause further delays.</mark></li></ol><ol id="cd4cfa5a-3b39-450b-8dda-933d4c9a28d8" class="numbered-list" start="2"><li><mark class="highlight-yellow_background"><strong>No connection management overhead.</strong></mark><strong> </strong>With UDP we have no connection establishment and no need to keep track of connection state (eg with buffers). Both mean even <mark class="highlight-red">less delays</mark>.</li></ol><p id="b5741610-9552-462a-8fef-0d0a49bb9c1e" class="">So with some real time applications that are sensitive to delays UDP is a better option, despite possibly higher losses. Eg DNS is using UDP. Which other applications prefer UDP over TCP? The table below gives us an idea:</p><figure id="233a3467-8f20-4422-991d-972a642e4fc3" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%205.png"><img style="width:3000px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%205.png"/></a></figure><p id="22b7b8d6-9850-4eee-be01-560688342644" class=""><mark class="highlight-teal_background"><strong>The UDP packet structure:</strong></mark><strong> </strong>UDP has a 64 bits header consisting of the following fields:</p><ol id="d92f95e8-d65d-44e4-8d00-1759deead6e7" class="numbered-list" start="1"><li><mark class="highlight-yellow_background">Source and destination ports.</mark></li></ol><ol id="9d8e8e01-885b-4af1-b487-2f3fa6b7e8cf" class="numbered-list" start="2"><li><mark class="highlight-yellow_background">Length</mark> of the UDP segment (header and data).</li></ol><ol id="27481441-09e2-4605-8a5f-b1d1a92b08bf" class="numbered-list" start="3"><li><mark class="highlight-yellow_background">Checksum</mark> (an error checking mechanism). Since there is no guarantee for link-by-link reliability, we need a basis mechanism in place for error checking. The UDP sender adds the src port, the dest port and the packet length. Then it takes the sum and performs an 1s complement (all 0s are turned to 1 and all 1s are turned to 0s). If during the sum there is an overflow, its wrapped around. The receiver adds all the four 16-bit words (including the checksum). The result should be all 1s unless an error has occurred.</li></ol><figure id="76c4e602-6790-4f50-880e-71b320f5bb9c" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%206.png"><img style="width:3000px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%206.png"/></a></figure><p id="ef4c3084-487c-4f20-b4fc-0784972f78cf" class="">
+</p><p id="79abf2e7-0f89-4a3f-bf50-d63e3d28e676" class="">
+</p><p id="5332afb8-8e5b-4b42-89e9-0414cf1c5aa3" class="">
+</p><h1 id="431806f0-eab8-4b7a-b209-59385accdfa4" class="block-color-pink">The TCP Three-Way Handshake</h1><h3 id="9f3f7d5d-5075-4cc5-b6ae-52062b36b866" class="block-color-pink_background"><strong>The TCP Three way Handshake:</strong></h3><p id="5b631d71-c621-4186-a09e-33688a77abd8" class=""><mark class="highlight-yellow_background">Step 1:</mark> <mark class="highlight-red">The TCP client sends a special segment, (containing no data) and with SYN bit set to 1</mark>. The Client also generates an initial sequence number (client_isn) and includes it in this special TCP SYN segment.</p><p id="46d09bdb-d588-46d4-81f7-f9f8118eb5ff" class=""><mark class="highlight-yellow_background">Step 2:</mark> <mark class="highlight-red">The Server upon receiving this packet, allocates the required resources for the connection and sends back the special ‘connection-granted’ segment which we call SYNACK</mark>. This packet has SYN bit set to 1, ack field containing (client_isn+1) value and a randomly chosen initial sequence number in the sequence number field.</p><p id="a0751b2e-52a0-45e6-be9e-ed9f1abfd2e1" class=""><mark class="highlight-yellow_background">Step 3:</mark> <mark class="highlight-red">When the client receives the SYNACK segment, it also allocates buffer and resources for the connection and sends an acknowledgment with SYN bit set to 0.</mark></p><figure id="18697a2b-1c34-4dea-a25b-229e7514a622" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%207.png"><img style="width:671px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%207.png"/></a></figure><h3 id="6fece94d-b918-44b3-8b26-e744e18f6211" class="block-color-pink_background"><strong>Connection Teardown:</strong></h3><p id="f7cb64b7-4695-46e0-ab5a-eb8405a97387" class=""><mark class="highlight-yellow_background">Step 1:</mark> <mark class="highlight-red">When client wants to end the connection, it sends a segment with FIN bit set to 1 to the server.</mark></p><p id="0bf88f0b-ec76-489d-978b-25a8ec1bcb14" class=""><mark class="highlight-yellow_background">Step 2:</mark> <mark class="highlight-red">Server acknowledges that it has received the connection closing request and is now working on closing the connection.</mark></p><p id="50a2feb7-a399-4b57-adf0-f274364bde72" class=""><mark class="highlight-yellow_background">Step 3:</mark> <mark class="highlight-red">The Server then sends a segment with FIN bit set to 1</mark>, indicating that connection is closed.</p><p id="ec1960d6-7754-4f60-aa9d-d160f451e337" class=""><mark class="highlight-yellow_background">Step 4:</mark> <mark class="highlight-red">The Client sends an ACK for it to the server.</mark> It also waits for sometime to resend this acknowledgment in case the first ACK segment is lost.</p><figure id="b48a3f4c-55de-46ce-90b6-9a1e6be2297f" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%208.png"><img style="width:667px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%208.png"/></a></figure><p id="2702f17b-93f7-444c-bd60-acfc008415b9" class="">
+</p><p id="0fcc2822-5f6f-4014-bd8f-ff547aad5753" class="">
+</p><p id="c0a26f89-afd7-43c2-a78c-c1cfbccb457a" class="">
+</p><h1 id="5bff1781-6aec-46e9-908d-02c081fd2be2" class="block-color-pink">Reliable Transmission</h1><p id="1dc9d400-6005-428a-8d56-f933354f60a2" class=""><mark class="highlight-teal_background"><strong>What is reliable transmission?</strong></mark> Recall that the <mark class="highlight-red">network layer is unreliable</mark> and it may lead to packets getting lost or arriving out of order. This can clearly be an issue for a lot of applications. For example, a file downloaded over the Internet might be corrupted if some of the packets were lost during the transfer.</p><p id="225f9801-0453-452a-b8c3-a6e1305d91a4" class=""><mark class="highlight-yellow_background">One option here is to allow the application developers take care of the network losses as is done in UDP.</mark> However, given that reliability is an important primitive desirable for a lot of applications, <mark class="highlight-red">TCP developers decided to implement this primitive in the transport layer.</mark> <mark class="highlight-yellow_background"><strong>Thus, TCP guarantees an in-order delivery of the application-layer data without any loss or corruption.</strong></mark></p><p id="d05f4a25-bb9f-4522-b5bf-01131a05fe41" class="">Now, let us look at how TCP implements reliability.</p><p id="d84859bc-a4ef-4533-bba7-4531619f8934" class="">In order to have a reliable communication, <mark class="highlight-yellow_background">the sender should be able to know which segments were received by the remote host and which were lost</mark>. Now, how can we achieve this? One way to do this is by <mark class="highlight-red">having the receiver send acknowledgements</mark> indicating that it has successfully received the specific segment. In case the sender does not receive an acknowledgement within a given period of time, the sender can assume the packet is lost and resend it. This method of using acknowledgements and timeouts is also known as <mark class="highlight-yellow_background"><strong>Automatic Repeat Request or ARQ</strong></mark><strong>.</strong></p><p id="ca7042cc-5984-4bed-b0e5-3ce37df579bb" class="">There are various methods in which it can be implemented:</p><p id="8af55333-b35e-4d2f-92c4-662b5ab5b8ea" class="">The simplest way would be for <mark class="highlight-red">the sender to send a packet and wait for its acknowledgement from the receiver.</mark> This is known as <mark class="highlight-yellow_background"><strong>Stop and Wait ARQ</strong></mark>. Note that the algorithm typically needs to figure out the waiting time after which it resends the packet and this estimation can be tricky. A small value of timeout can lead to unnecessary re-transmissions and a large value can lead to unnecessary delays. In most cases, the timeout value is a function of the estimated round trip time of the connection.</p><p id="c9964790-8798-449f-8071-7558a44923bb" class=""><mark class="highlight-yellow_background">Clearly, this kind of alternate sending and waiting for acknowledgement has a very low performance. </mark><mark class="highlight-red">In order to solve this problem, the sender can send multiple packets without waiting for acknowledgements</mark>. More specifically, <mark class="highlight-orange_background">the sender is allowed to send at most N unacknowledged packets typically referred to as the window size</mark>. As it receives acknowledgement from the receiver, it is allowed to <mark class="highlight-orange_background">send more packets based on the window size.</mark> In implementing this, <mark class="highlight-red">we need to take care of the following concerns:</mark></p><ul id="a86a799a-1a36-4557-a8c8-c5846bc23f9f" class="bulleted-list"><li><mark class="highlight-yellow_background">The receiver needs to be able to identify and notify the sender of a missing packet.</mark> Thus, <mark class="highlight-orange_background">each packet is tagged with a unique byte sequence number which is increased for subsequent packets</mark> in the flow based on the size of the packet.</li></ul><ul id="0c92f1ee-0665-4d54-872c-9c99068c8e8d" class="bulleted-list"><li><mark class="highlight-yellow_background">Also, now both sender and receiver would need to buffer more than one packet.</mark> For instance, the sender would need to buffer packets that have been transmitted but not acknowledged. Similarly, <mark class="highlight-orange_background">the receiver may need to buffer the packets</mark> because the rate of consuming these packets (say writing to a disk) is slower than the rate at which packets arrive.</li></ul><p id="1273a001-d156-4d2a-9644-44429f17e8f7" class="">Now let’s look at <mark class="highlight-red">how does the receiver notify the sender of a missing segment.</mark></p><p id="f666d5e5-e334-4839-bc16-bd631c6174ee" class=""><mark class="highlight-yellow_background">One way is for the receiver to send an ACK for the most recently received in-order packet.</mark> The sender would then send all packets from the most recently received in-order packet, even if some of them had been sent before. <mark class="highlight-yellow_background">The receiver can simply discard any out-of-order received packets. This is called </mark><mark class="highlight-yellow_background"><strong>Go-back-N.</strong></mark><mark class="highlight-yellow_background"> </mark>For instance, in the figure below if packet 7 was lost in the network, the receiver will discard any subsequent packets. The sender will send all the packets starting from 7 again.</p><figure id="2f9af7c2-1845-4fec-ac3c-ede802a4407d" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%209.png"><img style="width:3000px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%209.png"/></a></figure><p id="4f469a11-9a1a-4bab-ad2c-e6b68548b0da" class=""><mark class="highlight-yellow_background">Clearly, in the above case, a single packet error can cause a lot of unnecessary retransmissions. </mark><mark class="highlight-red">To solve this, TCP uses </mark><mark class="highlight-red"><strong>selective ACK</strong></mark><mark class="highlight-red">ing</mark>. In this, <mark class="highlight-yellow_background">the sender retransmits only those packets that it suspects were received in error.</mark> The receiver in this case would acknowledge a correctly received packet even if it is not in order. The out-of-order packets are buffered until any missing packets have been received at which point the batch of the packets can be delivered to the application layer.</p><p id="d5e4bab2-5ca2-4bdc-b3f8-dcb02a32cf27" class=""><mark class="highlight-red">Note that even in this case, TCP would need to use a timeout as there is a possibility of ACKs getting lost in the network.</mark></p><p id="ccd38a0c-8b84-4441-bd25-ebd9e4d6bf5c" class="">In addition to using timeout to detect loss of packets, <mark class="highlight-yellow_background">TCP also uses duplicate acknowledgements as a means to detect loss.</mark> <mark class="highlight-red">A duplicate ACK is additional acknowledgement of a segment for which the sender has already received acknowledgment earlier.</mark> When the sender receives 3 duplicate ACKs for a packet, it considers the packet to be lost and will retransmit it instead of waiting for the timeout. This is known as <mark class="highlight-yellow_background"><strong>fast retransmit</strong></mark><strong>.</strong> For example, in the figure below, <mark class="highlight-red">once sender receives 3 duplicate ACKs, it will retransmit packet 7 without waiting for timeout.</mark></p><figure id="9a55146b-a281-43ac-aff0-7a7d5fb76c53" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2010.png"><img style="width:3000px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2010.png"/></a></figure><p id="172f505b-7416-42fe-80d3-cc5ac8c10fc6" class="">
+</p><p id="0119e16b-b3d2-4fb0-9c77-d31878cbe991" class="">
+</p><h1 id="629db188-5634-4410-a3c8-2d9e7c981df2" class="block-color-pink">Transmission Control</h1><p id="c550cb95-4ad1-4244-b844-7a8f65f95b5a" class="">In this topic we will learn about the mechanisms provided in the transport-layer to control the transmission rate.</p><p id="8853c76d-8c17-461e-ae3e-653fa9d63eaa" class=""><mark class="highlight-teal_background"><strong>Why control the transmission rate?</strong></mark> We will first illustrate why we need to know and adapt the transmission rate. Consider a scenario when user A needs to send 1 Gb of file to a remote host B on a 100 Mbps link. What rate should it send the file? One could say that it should be 100 Mbps. But <mark class="highlight-red">how does user A determine that given it does not know the link capacity</mark>. Also, <mark class="highlight-red">what about other users that also would be using the same link</mark>? <mark class="highlight-red">What happens to the sending rate if the receiver B is also receiving files from a lot of other users</mark>? Finally, <mark class="highlight-red">which layer in the network decides the data transmission rate</mark>? In this section, we will try to answer all these questions.</p><p id="1044d962-1e85-439b-be28-554f15871896" class=""><mark class="highlight-teal_background"><strong>Where should the transmission control function reside in the network stack?</strong></mark> <mark class="highlight-yellow_background">One option is to let the application developers figure out and implement mechanisms for transmission control</mark>. <mark class="highlight-red">This is what UDP does</mark>. /However, it turns out that <mark class="highlight-red">transmission control is a fundamental function for most of the applications</mark>. <mark class="highlight-red">Thus it will be easier if it is implemented in the transport layer</mark>. Moreover, it also has to deal with issues of fairness in using the network as we will see later, thus making it more convenient to handle it at the transport layer. <mark class="highlight-yellow_background">Thus, TCP provides mechanisms for transmission control </mark>which have been a subject of interest to network researchers since the inception of computer networking. We will look at these in detail now.</p><p id="3d425c75-5820-4f9d-a3de-60e77c1b0df3" class="">
+</p><p id="cff67bbb-719f-445c-b300-1e5d94bb0605" class="">
+</p><h1 id="95bde266-f8b6-4d46-8e79-1865fe2ee552" class="block-color-pink">Flow Control</h1><p id="84b20ad3-fe6e-414c-953f-cd4f61c8e772" class="block-color-pink_background"><strong>Flow control: Controlling the transmission rate to protect the receiver’s buffer</strong></p><p id="6ec45c63-4b9f-42e3-8098-eb6a2e8c404c" class="">The first case where we need transmission control is <mark class="highlight-yellow_background">to protect the buffer of the receiver from overflowing</mark>. Recall that TCP uses a buffer at the receiver end to buffer packets that have not been transmitted to the application. <mark class="highlight-yellow_background">It could happen that the receiver is involved with multiple processes and does not read the data instantly</mark>. This can cause accumulation of huge amount of data and overflow the receive buffer.</p><p id="983e15dd-6e09-4794-b030-88033685b46c" class=""><mark class="highlight-yellow_background">TCP provides a rate control mechanism also known as flow control that helps match the sender’s rate against the receiver’s rate of reading the data</mark>. <mark class="highlight-red">Sender maintains a variable ‘receive window’</mark>. It provides sender an idea of how much data the receiver can handle at the moment.</p><p id="78cd92ea-0526-47da-8dd6-a8bf42677427" class="">We will illustrate its working using an example. Consider two hosts, A and B, that are communicating with each other over a TCP connection. Host A wants to send a file to Host B. For this, Host B allocates a receive buffer of size <mark class="highlight-yellow_background"><strong>RcvBuffer</strong></mark> to this connection. <mark class="highlight-red">The receiving host maintains two variables</mark>, <mark class="highlight-yellow_background"><strong>LastByteRead</strong></mark><strong> </strong>(<mark class="highlight-red">number of byte that was last read from the buffer</mark>) and <mark class="highlight-yellow_background"><strong>LastByteRcvd</strong></mark><strong> </strong>(<mark class="highlight-red">last byte number that has arrived from sender and placed in the buffer</mark>). Thus, in order to not overflow the buffer, TCP needs to make sure that</p><p id="9f2066f1-0c78-4574-b969-7a555522de12" class=""><mark class="highlight-blue_background">LastByteRcvd - LastByteRead &lt;= RcvBuffer</mark></p><p id="19cd4962-68a3-40b7-97a1-8d65390b4dbc" class="">The extra space that the receive buffer has, is specified using a parameter, termed as receive window.</p><p id="7727f687-327b-4d32-be92-007a19f8b436" class=""><mark class="highlight-blue_background">rwnd = RcvBuffer - [LastByteRcvd - LastByteRead]</mark></p><ul id="f41b4b6b-e5b9-4e4f-93ae-c2af90e8f2e2" class="bulleted-list"><li>rcv 버퍼에 남는 공간</li></ul><figure id="1d804f0b-3fa3-4c48-88eb-a762ce1337ed" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2011.png"><img style="width:3000px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2011.png"/></a></figure><p id="27cbd5cf-9f5b-4c00-9b27-df713293e9a9" class=""><mark class="highlight-yellow_background">The receiver advertises this value of rwnd in every segment/ACK it sends back to the sender.</mark></p><p id="9d8030cb-ff38-47f2-a3fb-63e94a6b84ed" class=""><mark class="highlight-yellow_background">The sender also keeps track of two variables, </mark><mark class="highlight-yellow_background"><strong>LastByteSent</strong></mark><mark class="highlight-yellow_background"> and </mark><mark class="highlight-yellow_background"><strong>LastByteAcked</strong></mark><mark class="highlight-yellow_background">.</mark></p><p id="94551db2-ad26-4d8c-a7fb-71ac55b6186f" class=""><mark class="highlight-blue_background">UnAcked Data Sent = LastByteSent - LastByteAcked</mark></p><p id="2f4ee151-438b-4cb0-bec8-e05f87491a3a" class="">To not overflow the receiver’s buffer, the sender needs to make sure that the maximum number of unacknowledged bytes it sends are no more than the rwnd.</p><p id="f35f8973-5aa7-41f1-bb9f-d8ee0c37d38d" class="">Thus we need:</p><p id="eb828918-1871-4108-a196-093924ba3cd5" class=""><mark class="highlight-blue_background">LastByteSent – LastByteAcked &lt;= rwnd</mark></p><p id="9312e8db-d334-45d0-a335-03a454a47e23" class=""><mark class="highlight-teal_background"><strong>Caveat:</strong></mark> However, there is one scenario where this scheme has a problem. Consider a scenario, if <mark class="highlight-red">the receiver had informed the sender that rwnd = 0</mark>, and thus the sender stops sending data. Also, <mark class="highlight-red">assume that B has nothing to send to A</mark>. Now, as the application processes the data at the receiver, <mark class="highlight-red">the receiver buffer is cleared but the sender may never know that new buffer space is now available </mark>and will be blocked from sending data even when receiver buffer is empty.</p><p id="30fa404e-4cd3-4682-b047-cdf1ac674fb7" class=""><mark class="highlight-yellow_background">TCP resolves this problem by making sender continue sending segments of size 1 byte even after when rwnd = 0</mark>. When the receiver acknowledges these segments, it will specify the rwnd value and the sender will know as soon as the receiver has some room in the buffer.</p><p id="47270718-6e39-476d-9d57-4cc9e4477350" class="">
+</p><p id="54edec82-45bb-46fb-8cdb-ad5ab507474a" class="">
+</p><h1 id="d9b1c030-1748-4de5-acc5-ca22a589a6d4" class="block-color-pink">Congestion Control Introduction</h1><p id="12c6552d-ee32-460e-8fa5-56e0e5b7022c" class="block-color-pink_background"><strong>Congestion control: Controlling the transmission rate to protect the network from congestion</strong></p><p id="3d2f2a22-94f1-45ac-bf5e-eabbbebdf735" class="">The second and very important reason for transmission control <mark class="highlight-yellow_background">is to avoid congestion in the network.</mark></p><p id="f47d897b-7ace-4073-ab34-af88f8a7ce48" class="">Let us look at an example to understand this. Consider a set of senders and receivers sharing a single link with capacity C. Assume, other links have capacity &gt; C. How fast should each sender transmit data? <mark class="highlight-yellow_background">Clearly, we do not want the combined transmission rate to be higher than the capacity of the link</mark> <mark class="highlight-red">as it can cause issues in the network such as longer queues, packet drops etc.</mark> Thus, we want a mechanism to control the transmission rate at the sender in order to avoid congestion in the network. This is known as <mark class="highlight-yellow_background">congestion control</mark>.</p><p id="37b0463f-2c46-4796-850b-950b0b143448" class="">It is important to note that <mark class="highlight-red">networks are quite dynamic with users joining and leaving the network, initiating data transmission and terminating existing flows</mark>. T<mark class="highlight-yellow_background">hus the mechanisms for congestion control need to be dynamic enough to adapt to these changing network conditions.</mark></p><p id="7c5b0932-f102-4c9a-aa0f-4142b05f4e1e" class="">
+</p><p id="314d119c-2ccc-42f2-aa0f-44da34cad20a" class="">
+</p><h1 id="246a4c2f-3716-47e6-b1a5-b0b6154eec94" class="block-color-pink">What are the goals of congestion control?</h1><p id="1d7e6e35-2274-4a00-b079-e0b402995b69" class="">Let us consider some of the desirable properties of a good congestion control algorithm:</p><ul id="20064274-562d-4507-b280-a5a119bf8eca" class="bulleted-list"><li><mark class="highlight-teal_background"><strong>Efficiency</strong></mark>. We should get <mark class="highlight-red">high throughput</mark> or utilization of the network should be high.</li></ul><ul id="cb3088b4-9a83-4265-8869-29a6ded9520d" class="bulleted-list"><li><mark class="highlight-teal_background"><strong>Fairness</strong></mark><strong>.</strong> <mark class="highlight-red">Each user should its fair share of the network bandwidth</mark>. The notion of fairness is <mark class="highlight-red">dependent on the network policy</mark>. For this context, we will assume that every flow under the same bottleneck link should get equal bandwidth.</li></ul><ul id="b698fb50-7b0d-42a6-8192-68764fd5be91" class="bulleted-list"><li><mark class="highlight-teal_background"><strong>Low delay</strong></mark>. In theory, <mark class="highlight-red">it is possible to design protocols that have consistently high throughput assuming infinite buffer</mark>. Essentially, we could just keep sending the packets to the network and they will get stored in the buffer and will eventually get delivered. However, it will lead to long queues in the network leading to delays. Thus, applications that are sensitive to network delays such as video conferencing will suffer. Thus, we want the network delays to be small.</li></ul><ul id="f08237f4-a80a-4c7e-afd8-406e0ba1ec6c" class="bulleted-list"><li><mark class="highlight-teal_background"><strong>Fast convergence</strong></mark><strong>.</strong> <mark class="highlight-red">The idea here is that a flow should be able to converge to its fair allocation fast.</mark> This is important as a typical <mark class="highlight-red">network’s workload is composed a lot of short flows and few long flows</mark>. If the convergence to fair share is not fast enough, the network will still be unfair for these short flows.</li></ul><p id="9fbc5423-9381-4c48-a775-c3d71c466174" class="">
+</p><p id="8343f851-5c9d-4814-a343-c3c35cda8be2" class="">
+</p><p id="5ab5ad39-2848-4591-91f8-656945df867f" class="">
+</p><h1 id="3bc98693-87a9-45d7-bd21-0de39303439c" class="block-color-pink">Congestion control flavors: E2E vs Network-assisted</h1><p id="4e03b189-5b16-49da-b032-898d8ee5c159" class="">Broadly speaking, there can be two approaches to implement congestion control:</p><p id="e6877a2f-11b5-4c22-b162-19dc4b4fe86e" class=""><mark class="highlight-teal_background"><strong>The first approach is network-assisted congestion control.</strong></mark> In this <mark class="highlight-yellow_background">we rely on the network layer to provide explicit feedback to the sender about congestion in the network</mark>. For instance, routers could use ICMP source quench to <mark class="highlight-red">notify the source that the network is congested</mark>. However, under severe congestion, <mark class="highlight-red">even the ICMP packets could be lost, rendering the network feedback ineffective</mark>.</p><p id="d8c88e31-e375-4c72-a252-684cb5c05dcf" class=""><mark class="highlight-teal_background"><strong>The second approach is to implement end-to-end congestion control</strong></mark><strong>.</strong> As opposed to the previous approach, the network here does <mark class="highlight-red">not provide any explicit feedback about congestion</mark> to the end hosts. Instead, <mark class="highlight-yellow_background">the hosts infer congestion from the network behavior and adapt the transmission rate.</mark></p><p id="9d08f8b7-7946-4005-a82a-9b431b663a86" class="">Eventually, <mark class="highlight-yellow_background">TCP ended up using the end-to-end approach</mark>. This <mark class="highlight-red">largely aligns with the end-to-end principle</mark> adopted in the design of the networks. <mark class="highlight-yellow_background">Congestion control is a primitive provided in the transport layer, whereas routers operate at the network layer</mark>. Therefore, <mark class="highlight-red">the feature resides in the end nodes with no support from the network</mark>. <mark class="highlight-orange_background">Note that this is no longer true as certain routers in the modern networks can provide explicit feedback to the end-host by using protocols such as ECN and QCN.</mark></p><p id="e8f13afb-68ae-45c3-bfd4-b2fd142e6457" class="">Let us now look at how TCP can infer congestion from the behavior of the network.</p><p id="e69b7352-db02-47e4-820d-73e49dc080cf" class="">
+</p><p id="9f100ad6-6081-40c4-8aba-8bb2bc6f13e6" class="">
+</p><h1 id="b66b4fb6-03ab-4989-b24d-464d0dc04dc7" class="block-color-pink">How a host infers congestion? Signs of congestion</h1><p id="998af8af-2e41-4bc7-8019-a476d94f08e0" class="">There are mainly two signals of congestion.</p><p id="4d7cc4c1-650b-4437-9f5d-7110519fdbfa" class=""><mark class="highlight-teal_background"><strong>First is the packet delay</strong></mark><strong>. </strong>As the network gets congested, the queues in the router buffers build up. This leads to increased packet delays. <mark class="highlight-yellow_background">Thus, an increase in the round trip time, which can be estimated based on ACKs, can be an indicator of congestion in the network</mark>. However, it turns out that packet delay in a network tend to be variable, making delay-based congestion inference quite tricky.</p><p id="c8dc6581-0f9a-4d3e-9ea8-713a9a483523" class=""><mark class="highlight-teal_background"><strong>Another signal for congestion is packet loss</strong></mark><strong>.</strong> <mark class="highlight-yellow_background">As the network gets congested, routers start dropping packets.</mark> <mark class="highlight-red">Note that packets can also be lost due to other reasons such as routing errors, hardware failure, TTL expiry, error in the links, or flow control problems, although it is rare</mark>.</p><p id="efcfeaaa-1033-4652-b7af-8b6b4e580c84" class="">The earliest implementation of TCP ended up using <mark class="highlight-red">loss as a signal for congestion</mark>. This is mainly because TCP was already detecting and handling packet losses to provide reliability.</p><p id="a2eeb2b5-8322-4860-a3e6-d8302b7efcaf" class="">
+</p><h1 id="5c078202-3657-42dd-b380-c3a22dbbdb39" class="block-color-pink">How does a TCP sender limit the sending rate?</h1><p id="6953cc77-6825-4b7d-b4d7-359dcb652e09" class=""><mark class="highlight-yellow_background">The idea of TCP congestion control was introduced so that each source can determine the network’s available capacity</mark> and know how many packets it can send without adding to the network’s level of congestion. <mark class="highlight-yellow_background">Each source uses ACKs as a pacing mechanism</mark>. Each source uses the ACK to determine if the packet released earlier to the network was received by the receiving host and it is now safe to release more packets into the network.</p><p id="5ee989fe-579e-48a8-8d25-d86f4ff2cdb9" class=""><mark class="highlight-yellow_background">TCP uses a congestion window which is similar to the receive window used for flow control.</mark> <mark class="highlight-red">It represents the maximum number of unacknowledged data that a sending host can have in transit</mark> (<mark class="highlight-orange_background">sent but not yet acknowledged</mark>).</p><p id="31b01b0f-174b-4de2-b086-0cc17103d83e" class=""><mark class="highlight-yellow_background">TCP uses a probe-and-adapt approach in adapting the congestion window.</mark> Under regular conditions, TCP increases the congestion window trying to achieve the available throughput. <mark class="highlight-orange_background">Once it detects congestion then the congestion window is decreased</mark>.</p><p id="db4d89e0-9099-4f7b-a04c-107f2ae43eb2" class="">In the end, <mark class="highlight-red">the number of unacknowledged data that a sender can have is the minimum of the congestion window and the receive window.</mark></p><p id="6e389a61-460d-4370-97bc-92a1e30d3641" class=""><mark class="highlight-blue_background">LastByteSent – LastByteAcked &lt;= min{cwnd, rwnd}</mark></p><p id="cae6201c-07c1-4006-9c6c-5dffd890e606" class="">In a nutshell, <mark class="highlight-red">a TCP sender cannot send faster than the slowest component</mark>, which is either the network or the receiving host.</p><p id="81546563-2e7b-4ad5-9f2c-a6eca0604bea" class="">
+</p><p id="ea036a31-2cc8-4d9d-9ebf-243c9c4d6b84" class="">
+</p><h1 id="3b276112-d7ed-4f0a-bf68-97147ec0f125" class="block-color-pink">Congestion control at TCP - AIMD</h1><p id="e5ae1f30-fcc2-4b6a-a4e1-46eeef108d1e" class=""><mark class="highlight-yellow_background">TCP decreases the window when the level of congestion goes up, and it increases the window when the level of congestion goes down.</mark> We refer to this combined mechanism as <mark class="highlight-red">additive increase/multiplicative decrease (AIMD).</mark></p><h3 id="72ed34cc-a1ea-449d-bca7-95ce0f4c14d9" class="block-color-pink_background"><strong>Additive Increase:</strong></h3><p id="4eddef92-8fa9-48fc-8172-efb720464650" class="">The connection starts with a constant initial window, typically 2 and increases it additively. <mark class="highlight-yellow_background">The idea behind additive increase is to increase the window by one packet every RTT (Round Trip Time)</mark>. So, in the additive increase part of the AIMD, every time the sending host successfully sends a cwnd number of packets it adds 1 packet to cwnd.</p><p id="16148d20-4270-4036-99b7-60547b932459" class="">Also, in practice, this increase in AIMD happens incrementally. <mark class="highlight-yellow_background">TCP doesn’t wait for ACKs of all the packets from the previous RTT. Instead, it increases the congestion window size as soon as each ACK arrives.</mark> In bytes, this increment is a portion of the MSS (Maximum Segment Size).</p><p id="58ed52d4-edca-4891-9a66-e0c236701c37" class=""><mark class="highlight-blue_background">Increment = MSS × (MSS / CongestionWindow)</mark></p><p id="6faec9a8-5bf5-4355-ad0f-b3b559d2196c" class=""><mark class="highlight-blue_background">CongestionWindow + = Increment</mark></p><figure id="e174043e-2248-44fb-b1bf-8280808bbd56" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2012.png"><img style="width:666px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2012.png"/></a></figure><h3 id="b4ffcea5-1261-468d-9827-25f97649bcc3" class="block-color-pink_background"><strong>Multiplicative Decrease:</strong></h3><p id="ee13782b-4f03-4646-9541-9e585f902e3c" class=""><mark class="highlight-yellow_background">Once TCP Reno detects congestion, it reduces the rate at which the sender transmits.</mark> So, when the TCP sender detects that a timeout occurred, then it sets the CongestionWindow (cwnd) to half of its previous value. This decrease of the cwnd for each timeout corresponds to the “multiplicative decrease” part of AIMD. <mark class="highlight-red">For example, suppose the cwnd is currently set to 16 packets. If a loss is detected, then cwnd is set to 8</mark>. <mark class="highlight-red">Further losses would result to the cwnd to be reduced to 4 and then to 2 and then to 1</mark>. <mark class="highlight-yellow_background">The value of cwnd cannot be reduce further than 1 packet.</mark></p><p id="60da0023-d34e-4d28-9218-b1dd98111580" class="">Figure below shows an example of how the congestion control window decreases when congestion is detected:</p><figure id="456e6e91-a175-4673-abdb-73963bca2274" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2013.png"><img style="width:672px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2013.png"/></a></figure><h3 id="d823c617-7744-455a-8732-5c7247176cc2" class="block-color-pink_background"><strong>Signals of congestion:</strong></h3><p id="1f3e1684-4539-476e-abf7-09e8b418d20a" class=""><mark class="highlight-yellow_background">TCP Reno</mark> uses two types of <mark class="highlight-red">packet loss detection</mark> as a signal of congestion. First is <mark class="highlight-yellow_background">the triple duplicate ACKs</mark> and <mark class="highlight-red">is considered to be mild congestion</mark>. In this case, <mark class="highlight-red">the congestion window is reduced to half of the original congestion window</mark>.</p><p id="1d825645-bdf8-4d61-93b7-bb316441ace1" class="">The second kind of congestion detection is <mark class="highlight-yellow_background">timeout</mark> i.e. when no ACK is received within a specified amount of time. It is considered <mark class="highlight-red">a more severe form of congestion</mark>, and <mark class="highlight-red">the congestion window is reset to the Initial Window.</mark></p><h3 id="ca0517e6-f7e3-4384-aea8-2e9a727e315e" class="block-color-pink_background"><strong>Congestion window sawtooth pattern:</strong></h3><p id="affcee09-d347-4e44-8f86-6c6d6408a2b0" class="">TCP continually decreases and increases the congestion window throughout the lifetime of the connection. If we plot the cwnd with respect to time, we observe that it follows a sawtooth pattern as shown in the figure:</p><figure id="e33139c8-b82e-452c-ae5c-44cc11d46a6c" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2014.png"><img style="width:668px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2014.png"/></a></figure><p id="f28b540a-a9bf-4cf8-a0bd-b725aa266b18" class="">
+</p><p id="d4d296fc-1205-4fa4-ae88-3e7665d42832" class="">
+</p><h1 id="f61a7924-bd03-44e7-95cc-314eac72ee94" class="block-color-pink">Slow start in TCP</h1><p id="4717b062-62c0-46b4-9433-c8ac7361d368" class="">The AIMD approach we saw in the previous topic is useful when the sending host is operating very close to the network capacity. <mark class="highlight-yellow_background">AIMD approach reduces the congestion window at a much faster rate than it increases the congestion window.</mark> <mark class="highlight-red">The main reason for this approach is that the consequences of having too large a window are much worse than those of it being too small.</mark> For example, when the window is too large, more packets will be dropped and retransmitted, making network congestion even worse; <mark class="highlight-red">thus, it is important to reduce the number of packets being sent into the network as quickly as possible</mark>.</p><p id="1baadcc4-96bb-408a-8f97-53d915903f59" class=""><mark class="highlight-yellow_background">In contrast, when we have a new connection that starts from cold start, it can take much longer for the sending host to increase the congestion window by using AIMD</mark>. So <mark class="highlight-red">for a new connection, we need a mechanism which can rapidly increase the congestion window from a cold start</mark>.</p><p id="06b8dd67-cd10-4168-b6f3-b4f10407f1b3" class=""><mark class="highlight-yellow_background">To handle this, TCP Reno has a</mark><mark class="highlight-yellow_background"><strong> slow start phase</strong></mark><mark class="highlight-yellow_background"> where the congestion window is increased exponentially instead of linearly as in the case of AIMD</mark>. The source host starts by setting cwnd to 1 packet. When it receives the ACK for this packet, it adds 1 to the current cwnd and sends 2 packets. Now when it receives the ACK for these two packets, it adds 1 to cwnd for each of the ACK it receives and sends 4 packets. Once the congestion window becomes more than a threshold, often referred to as <mark class="highlight-yellow_background"><strong>slow start threshold</strong></mark><mark class="highlight-yellow_background">, it starts using AIMD.</mark></p><p id="a29a0b8f-dc01-4249-bf39-0da98b78e58f" class="">The figure below shows the sending host during slow start.</p><figure id="58519f7a-c437-4776-8b27-1911a6d2ff17" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2015.png"><img style="width:667px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2015.png"/></a></figure><p id="f1e08759-327a-4a07-b4e9-727269e6fd02" class="">The figure below shows an example of the slow start phase.</p><figure id="80873209-0697-48a3-bbcc-6dbb5c9ccdbb" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2016.png"><img style="width:668px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2016.png"/></a></figure><p id="7490e1eb-525b-43c1-911f-aa69af27fd01" class=""><mark class="highlight-yellow_background">Slow start is called “slow” start despite using an exponential increase because in the beginning it sends only one packet and starts doubling it after each RTT</mark>. Thus, <mark class="highlight-red">it is slower than starting with a large window.</mark></p><p id="2f8d30df-9f12-45e3-b4ac-5a6ce9f9c6bb" class="">Finally, we note that there is one more scenario, where slow start kicks in. <mark class="highlight-yellow_background">When a connection dies while waiting for a timeout to occur.</mark> <mark class="highlight-red">This happens when the source has sent enough data as allowed by the flow control mechanism of TCP and times out while waiting for the ACK which will not arrive</mark>. Thus, the source will eventually receive a cumulative ACK that will reopen the connection and then instead of sending the available window size worth of packets at once, it will use slow start mechanism.</p><p id="34d50af0-a1fb-4e1c-81f7-e048c2bf3839" class=""><mark class="highlight-yellow_background">In this case, the source will have a fair idea about the congestion window from the last time it had a packet loss.</mark> <mark class="highlight-red">It will now use this information as the “target” value to avoid packet loss in future. </mark>This target value is stored in a temporary variable “<mark class="highlight-yellow_background">CongestionThreshold</mark>”. <mark class="highlight-red">Now, source performs slow start by doubling the number of packets after each RTT until cwnd value reaches the congestion threshold</mark> (a <mark class="highlight-orange_background">knee point</mark>). After this point, it increases the window by 1 (<mark class="highlight-orange_background">additive increase</mark>) each RTT until it experiences packet loss (<mark class="highlight-orange_background">cliff point</mark>). After which it multiplicatively decreases the window.</p><p id="b7d4abd9-6b2a-4743-8006-9252c2acdc92" class="">
+</p><p id="7cd7e50b-0819-4f2f-ad66-2ba09b0e3628" class="">
+</p><h1 id="5f64f70e-8166-47de-875b-25b228f2c90c" class="block-color-pink">TCP Fairness</h1><p id="960258ce-1b29-45c8-a8a7-93bc5669c29f" class="">Recall that we defined fairness as one of the desirable goals of congestion control. Note that fairness in this case means that for <mark class="highlight-red">k-connections passing through one common link</mark> with <mark class="highlight-red">capacity R bps</mark>, <mark class="highlight-yellow_background">each connection gets an average throughput of R/k.</mark></p><p id="35f7ff63-96ef-48a9-a4b1-6650b4b6c36b" class="">Let us understand if TCP is fair.</p><p id="6901fe96-706a-47a8-986d-839a929b133e" class=""><mark class="highlight-red">Consider a simple scenario where two TCP connections share a single link with bandwidth R</mark>. For simplicity, we assume that both connections have <mark class="highlight-red">same RTT</mark> and there are <mark class="highlight-red">only TCP segments passing through the link</mark>. If we plot a graph for throughput of these two connections, then the <mark class="highlight-red">throughput for each should sum up to R</mark>. So, the goal is to get throughput achieved for each link fall somewhere near the intersection of the equal bandwidth share line and the full bandwidth utilization line, as shown in below graph:</p><figure id="49e82d59-6f85-4d1d-8e23-f671afdfef11" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2017.png"><img style="width:3000px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2017.png"/></a></figure><p id="35443fd9-9395-4ee6-99f6-22343e0627d5" class="">At point A in the above graph, total utilized bandwidth is less than R, so no loss can occur at this point. Therefore, both the connection will increase their window size, thus the sum of the utilized bandwidth will grow and graph will move towards B.</p><p id="ee68b92d-8667-4d47-89dd-a28d4e98193b" class="">At point B, as the total transmission rate is more than R, both connection may start having packet loss. Now they will decrease their window size to half and come back to point C.</p><p id="093f78a3-9ba4-4636-a129-e99b63a88e56" class="">At point C, again the total throughput is less than R, so both connection will increase their window size to move towards point D and will again experience packet loss at D, and so on.</p><p id="526ffd88-d49d-450d-8577-2f80e934d532" class=""><mark class="highlight-yellow_background">Thus, using AIMD leads to fairness in bandwidth sharing.</mark></p><p id="2ab96ad2-fd97-41b9-8d98-14040e9adb6c" class="">
+</p><p id="cd0f6b5d-1706-4163-9662-29677e2538b2" class="">
+</p><h1 id="27ae9e62-8298-47a1-adbb-2e07c262f750" class="block-color-pink">Caution about fairness</h1><p id="67fe5bad-8a28-40f2-85cd-f261f3572c58" class=""><mark class="highlight-red">There can be cases when TCP is not fair.</mark></p><p id="62487d23-8be7-40a3-8366-ecc965abcf54" class=""><mark class="highlight-yellow_background">One such case arises due to the difference in the RTT of different TCP connections.</mark> Recall that TCP Reno uses ACK-based adaptation of the congestion window. Thus, <mark class="highlight-orange_background">connections with smaller RTT values would increase their congestion window faster</mark> than the ones with longer RTT values. <mark class="highlight-red">This leads to an unequal sharing of the bandwidth.</mark></p><p id="ff14a8a4-a812-4e8e-a396-8546b44947c1" class=""><mark class="highlight-yellow_background">Another case of unfairness arises if a single application uses multiple parallel TCP connections. </mark>Consider, for example, nine applications using one TCP connection sharing a link of rate R. If a new application establishes connection on the same link and also uses one TCP connection, then each application gets fairly the same transmission rate of R/10. But <mark class="highlight-red">if the new application had 11 parallel TCP connections, then it would get an unfair allocation of more than R/2.</mark></p><p id="4b8a7515-fc0f-459c-bb39-e0aa82aea264" class="">
+</p><p id="e433f33b-68aa-425a-b060-b32c5677a1ca" class="">
+</p><h1 id="24b007f6-beb7-4df5-a156-8db2c5457a5b" class="block-color-pink">Congestion Control in Modern Network Environments: TCP CUBIC</h1><p id="27b877fc-19b1-477e-82c9-c5d374c94754" class="">Over the years, networks have improved with link speeds increasing tremendously. This has called for changes in the TCP congestion control mechanisms mainly with a desire to improve link utilization.</p><p id="63867901-0489-41ed-b760-019dd990e1c4" class="">We can see that TCP Reno has low network utilization, especially when the network bandwidth is high or the delay is large. Such networks are also known as high bandwidth delay product networks.</p><p id="a4f38b09-1084-4e26-acbe-890733f2d8fb" class=""><mark class="highlight-yellow_background">To make TCP more efficient under such networks, many improvements to TCP congestion control have been proposed</mark>. Now we will look at one such version, called <mark class="highlight-yellow_background">TCP CUBIC</mark>, which was also implemented in the Linux kernel. It uses a CUBIC polynomial as the growth function.</p><figure id="8f897278-a3f1-43b5-983c-6c4a4d4a86a7" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2018.png"><img style="width:3000px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2018.png"/></a></figure><p id="546bcafa-b668-4b07-adda-01ad30cc3fa9" class=""><mark class="highlight-yellow_background">Let us see what happens when TCP experiences a triple duplicate ACK</mark>, say at window=Wmax. This could be because of congestion in the network. To maintain TCP-fairness, it uses a multiplicative decrease and reduces the window to half. Let us call this Wmin.</p><p id="b10c2ba7-2f2f-494c-bcca-6d886006891d" class=""><mark class="highlight-yellow_background">Now, we know that the optimal window size would be in between Wmin and Wmax and closer to Wmax</mark>. So, <mark class="highlight-red">instead of increasing the window size by 1, it is okay to increase the window size aggressively in the beginning</mark>. <mark class="highlight-yellow_background">Once the W approaches closer to Wmax, it is wise to increase it slowly because that is where we detected a packet loss last time</mark>. Assuming no loss is detected this time around Wmax, we keep on increasing the window a little bit. If there is no loss still, it could be that the previous loss was due to a transient congestion or non-congestion related event. Therefore, it is okay to increase the window size with higher values now.</p><p id="278dc4e5-9db7-4216-94e7-4673096f9b6b" class="">This window growth idea is approximated in TCP CUBIC using a cubic function. Here is the exact function it uses for the window growth:</p><p id="74927a33-0906-433d-9f32-ce3008e68863" class=""><mark class="highlight-blue_background">W(t) = C(t-K)3 + Wmax</mark></p><p id="515f6847-4e17-4bcf-8c96-3c516987bb0e" class="">Here, Wmax is the window when the packet loss was detected. Here C is a scaling constant, and K is the time period that the above function takes to increase W to Wmax when there is no further loss event and is calculated by using the following equation:</p><figure id="40a317c0-27e4-4e31-94a9-fde50b91e337" class="image"><a href="https://gatech.instructure.com/equation_images/%255Csqrt%255B3%255D%257B%255Cfrac%257BW%255Cmax%255Cbeta%257D%257BC%257D%257D"><img src="https://gatech.instructure.com/equation_images/%255Csqrt%255B3%255D%257B%255Cfrac%257BW%255Cmax%255Cbeta%257D%257BC%257D%257D"/></a></figure><p id="7d0108b6-0148-4524-8c51-40b8804246a3" class="">It is important to note that time here is the time elapsed since the last loss event instead of the usual ACK-based timer used in TCP Reno. This also <mark class="highlight-red">makes TCP CUBIC RTT-fair</mark>.</p><p id="36ed4cdd-5ce2-46d2-bbc7-cc7da34643a3" class="">
+</p><p id="50102e0c-42d7-40a0-869f-7d556d04a093" class="">
+</p><h1 id="d3f582a0-baca-4d7d-bf52-0ee611472d21" class="block-color-pink">The TCP Protocol: TCP Throughput</h1><p id="cea736a5-1a95-4f78-b950-5219d939e46d" class="">In a previous topic, we saw that <mark class="highlight-red">the congestion window follows a sawtooth pattern</mark>. As shown in this Figure. The congestion window is increased by 1 packet every RTT, until it reaches the maximum value W, at which point a loss is detected and the cwnd is cut in half, W/2.</p><p id="d48cca0e-3c81-4bfc-828d-2a2cd3c90b51" class="">Given this behavior, we want to have a simple model that predicts the throughput for a TCP connection.</p><p id="f93ca192-9ac9-4b85-a276-037f7ed3b790" class="">To make our model more realistic, let&#x27;s also assume that we have p = the probability loss. So, we assume that the network delivers 1 out of every p consecutive packets followed by a single packet loss.</p><figure id="9f47a9d9-abc4-4182-a599-824d9f25b568" class="image"><a href="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2019.png"><img style="width:665px" src="Lesson%202%20Transport%20and%20Application%20Layers%20f8fc61f53cb6404fa6baad07f8220e80/Untitled%2019.png"/></a></figure><p id="5777b533-45a7-43e1-84ab-2943ccd9c1d8" class="">Because the congestion window (cwnd) size increases a constant rate of 1 packet for every RTT, the height of the sawtooth is W/2 and the width of the base is W/2, which corresponds to W/2 round trips, or <div class="indented"><p id="337e06b7-7e3e-45ba-8a31-5953b2b23193" class=""><strong>RTT* W/2</strong>.</p></div></p><p id="557fc4cd-ce7d-487f-aa33-90705a341b6d" class="">The number of packets sent in one cycle the area under the sawtooth. Therefore, the total number of packets sent:<div class="indented"><p id="5f57b43d-db7c-4745-ab4c-ab31d072ff08" class="">(W/2)2 + 1/2*(W/2)2 = 3/8*W2</p></div></p><p id="77c58898-6798-4ee9-a485-f98adfcb66eb" class="">As stated in our assumptions about out lossy network, it delivers 1/p packets followed by a loss. So:</p><p id="90b17edb-e753-4670-a636-4cba5369f820" class="">, solving for W =</p><figure id="b0c8dbf4-2588-4e36-a2e0-bc31b6523c62" class="image"><a href="https://gatech.instructure.com/equation_images/%255Csqrt%255B%255D%257B%255Cfrac%257B8%257D%257B3p%257D%257D"><img src="https://gatech.instructure.com/equation_images/%255Csqrt%255B%255D%257B%255Cfrac%257B8%257D%257B3p%257D%257D"/></a></figure><p id="6bf9ec3d-87dd-4bd4-ab98-6783b3ec48df" class="">The rate that data that is transmitted is computed as:<div class="indented"><p id="87ca0213-2094-499e-b96f-d6968ba4be6d" class="">BW = data per cycle / time per cycle</p></div></p><p id="984bdc50-2c92-41a9-b1b3-551ff3de0270" class="">Substituting from above:</p><figure id="ea6a3361-6e71-4ca6-8ebc-58921cc3d6b2" class="image"><a href="https://gatech.instructure.com/equation_images/%255Cfrac%257Bdata%255C%253Aper%255C%253Acycle%257D%257Btime%255C%253Aper%255C%253Acycle%257D%255C%253A%253D%255C%253A%255Cfrac%257BMSS%255C%253A%255Ccdot%255Cfrac%257B%255C%253A3%257D%257B8%257DW%255E2%257D%257BRTT%255C%253A%255Ccdot%255Cfrac%257B%255C%253AW%257D%257B2%257D%257D%255C%253A%253D%255C%253A%255Cfrac%257B%255Cfrac%257BMSS%257D%257Bp%257D%257D%257BRTT%255Csqrt%255B%255D%257B%255Cfrac%257B2%257D%257B3p%257D%257D%257D"><img src="https://gatech.instructure.com/equation_images/%255Cfrac%257Bdata%255C%253Aper%255C%253Acycle%257D%257Btime%255C%253Aper%255C%253Acycle%257D%255C%253A%253D%255C%253A%255Cfrac%257BMSS%255C%253A%255Ccdot%255Cfrac%257B%255C%253A3%257D%257B8%257DW%255E2%257D%257BRTT%255C%253A%255Ccdot%255Cfrac%257B%255C%253AW%257D%257B2%257D%257D%255C%253A%253D%255C%253A%255Cfrac%257B%255Cfrac%257BMSS%257D%257Bp%257D%257D%257BRTT%255Csqrt%255B%255D%257B%255Cfrac%257B2%257D%257B3p%257D%257D%257D"/></a></figure><p id="a61a72f5-01a1-48ee-8b71-6e9b39c9f886" class="">We can collect all of our</p><p id="d228208d-da41-4680-bf9d-3e4967fb9b2e" class=""><strong>constants</strong></p><p id="5dfaefff-a2db-423d-b7f8-20419edf0ce0" class="">into</p><figure id="1a0b3e5d-d7b7-4240-8524-3ddb936c459f" class="image"><a href="https://gatech.instructure.com/equation_images/C%255C%253A%253D%255C%253A%255Csqrt%257B%255Cfrac%257B3%257D%257B2%257D%257D"><img src="https://gatech.instructure.com/equation_images/C%255C%253A%253D%255C%253A%255Csqrt%257B%255Cfrac%257B3%257D%257B2%257D%257D"/></a></figure><p id="72616761-842c-42a6-a6c8-796cbec1a626" class="">, compute the throughput:</p><figure id="7e532741-2100-404c-81e5-f6fdff0ac664" class="image"><a href="https://gatech.instructure.com/equation_images/BW%255C%253A%253D%255C%253A%255Cfrac%257BMSS%257D%257BRTT%257D%255Ccdot%255Cfrac%257BC%257D%257B%255Csqrt%257Bp%257D%257D"><img src="https://gatech.instructure.com/equation_images/BW%255C%253A%253D%255C%253A%255Cfrac%257BMSS%257D%257BRTT%257D%255Ccdot%255Cfrac%257BC%257D%257B%255Csqrt%257Bp%257D%257D"/></a></figure><p id="3cdb3884-89da-4f04-8480-b1a20655b43d" class="">In practice, because of additional parameters, such as small receiver windows, extra bandwidth availability, and TCP timeouts, our constant term C is usually less than 1. This means that bandwidth is bounded by:</p><figure id="9433a224-60d8-4e7a-b830-af2c2df271c8" class="image"><a href="https://gatech.instructure.com/equation_images/BW%255C%253A%253C%255C%253A%255Cfrac%257BMSS%257D%257BRTT%257D%255Ccdot%255Cfrac%257B1%257D%257B%255Csqrt%257Bp%257D%257D"><img src="https://gatech.instructure.com/equation_images/BW%255C%253A%253C%255C%253A%255Cfrac%257BMSS%257D%257BRTT%257D%255Ccdot%255Cfrac%257B1%257D%257B%255Csqrt%257Bp%257D%257D"/></a></figure><p id="a288f901-daae-4cc4-b785-a0a195593262" class="">
+</p><p id="989f99c7-c3f5-47dc-946c-24a05a856bb2" class="">
+</p><p id="93e2eec4-3ba4-4bf1-bd2a-26b1654516cc" class="">
+</p></div></article></body></html>

@@ -1,0 +1,656 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Lesson 3: Intradomain Routing</title><style>
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, YuMincho, "Yu Mincho", "Hiragino Mincho ProN", "Hiragino Mincho Pro", "Songti TC", "Songti SC", "SimSun", "Nanum Myeongjo", NanumMyeongjo, Batang, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC', 'Noto Sans CJK KR'; }
+
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC', 'Noto Sans Mono CJK KR'; }
+
+.highlight-default {
+}
+.highlight-gray {
+	color: rgb(155,154,151);
+}
+.highlight-brown {
+	color: rgb(100,71,58);
+}
+.highlight-orange {
+	color: rgb(217,115,13);
+}
+.highlight-yellow {
+	color: rgb(223,171,1);
+}
+.highlight-teal {
+	color: rgb(15,123,108);
+}
+.highlight-blue {
+	color: rgb(11,110,153);
+}
+.highlight-purple {
+	color: rgb(105,64,165);
+}
+.highlight-pink {
+	color: rgb(173,26,114);
+}
+.highlight-red {
+	color: rgb(224,62,62);
+}
+.highlight-gray_background {
+	background: rgb(235,236,237);
+}
+.highlight-brown_background {
+	background: rgb(233,229,227);
+}
+.highlight-orange_background {
+	background: rgb(250,235,221);
+}
+.highlight-yellow_background {
+	background: rgb(251,243,219);
+}
+.highlight-teal_background {
+	background: rgb(221,237,234);
+}
+.highlight-blue_background {
+	background: rgb(221,235,241);
+}
+.highlight-purple_background {
+	background: rgb(234,228,242);
+}
+.highlight-pink_background {
+	background: rgb(244,223,235);
+}
+.highlight-red_background {
+	background: rgb(251,228,228);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(55, 53, 47, 0.6);
+	fill: rgba(55, 53, 47, 0.6);
+}
+.block-color-brown {
+	color: rgb(100,71,58);
+	fill: rgb(100,71,58);
+}
+.block-color-orange {
+	color: rgb(217,115,13);
+	fill: rgb(217,115,13);
+}
+.block-color-yellow {
+	color: rgb(223,171,1);
+	fill: rgb(223,171,1);
+}
+.block-color-teal {
+	color: rgb(15,123,108);
+	fill: rgb(15,123,108);
+}
+.block-color-blue {
+	color: rgb(11,110,153);
+	fill: rgb(11,110,153);
+}
+.block-color-purple {
+	color: rgb(105,64,165);
+	fill: rgb(105,64,165);
+}
+.block-color-pink {
+	color: rgb(173,26,114);
+	fill: rgb(173,26,114);
+}
+.block-color-red {
+	color: rgb(224,62,62);
+	fill: rgb(224,62,62);
+}
+.block-color-gray_background {
+	background: rgb(235,236,237);
+}
+.block-color-brown_background {
+	background: rgb(233,229,227);
+}
+.block-color-orange_background {
+	background: rgb(250,235,221);
+}
+.block-color-yellow_background {
+	background: rgb(251,243,219);
+}
+.block-color-teal_background {
+	background: rgb(221,237,234);
+}
+.block-color-blue_background {
+	background: rgb(221,235,241);
+}
+.block-color-purple_background {
+	background: rgb(234,228,242);
+}
+.block-color-pink_background {
+	background: rgb(244,223,235);
+}
+.block-color-red_background {
+	background: rgb(251,228,228);
+}
+.select-value-color-default { background-color: rgba(206,205,202,0.5); }
+.select-value-color-gray { background-color: rgba(155,154,151, 0.4); }
+.select-value-color-brown { background-color: rgba(140,46,0,0.2); }
+.select-value-color-orange { background-color: rgba(245,93,0,0.2); }
+.select-value-color-yellow { background-color: rgba(233,168,0,0.2); }
+.select-value-color-green { background-color: rgba(0,135,107,0.2); }
+.select-value-color-blue { background-color: rgba(0,120,223,0.2); }
+.select-value-color-purple { background-color: rgba(103,36,222,0.2); }
+.select-value-color-pink { background-color: rgba(221,0,129,0.2); }
+.select-value-color-red { background-color: rgba(255,0,26,0.2); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="cf5b6182-b3d1-4430-93a7-3e78d7f17ac3" class="page sans"><header><h1 class="page-title">Lesson 3: Intradomain Routing</h1></header><div class="page-body"><nav id="8f0a3da0-08c7-4dbd-b062-bf214d0dbbf0" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f1ed2766-f14e-47f6-b453-22bf09b6673d">Lesson 3 Introduction</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#488077e9-5217-4771-88bf-60231c4f2d76">Routing Algorithms</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ac001406-2370-422e-9066-df4d22af4866">Linkstate Routing Algorithm</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b3dfffdb-1268-4a3b-ae09-34310e2f798a">Linkstate Routing Algorithm - Example</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#360e1d5b-4faf-4084-b336-b2608d23a84a">Linkstate Routing Algorithm - Computational Complexity</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#02e7899b-2da1-4773-8fe9-4a4606eab8bd">Distance Vector Routing</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#bd7d3e6d-5f6e-41bd-8194-9a249474d53f">Distance Vector Routing Example</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#482bd554-0c9b-401c-b28e-d153296fc3ac">Link Cost Changes and Failures in DV - Count to Infinity Problem</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d0ac274a-8708-45f9-8461-519af4ffe6d4">Poison Reverse</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#11ddffc2-ef28-4b96-b494-3038a7d7b636">Distance Vector Routing Protocol Example: RIP</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#47af1274-a9be-4d0e-8eb0-9e23f8f6d8be">Linkstate Routing Protocol Example: OSPF</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#aa4c6911-7e7d-499f-ba7d-a9b31acf9674">Processing OSPF Messages in the Router</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#7de06f16-faf8-43e8-a0c4-edcb57b133d6">Hot Potato Routing</a></div></nav><p id="eb89aaf5-9527-4691-ae8f-0fbbee604c30" class="">
+</p><p id="e49c6977-77f6-44f4-8131-fb1c1b6fa603" class="">
+</p><h1 id="f1ed2766-f14e-47f6-b453-22bf09b6673d" class="block-color-pink">Lesson 3 Introduction</h1><p id="5815cc3f-9ef3-4c47-b001-cfae02509cfe" class="">In this lecture we are focusing on the network layer and on a specific function of the network layer which is routing within a single administrative domain.</p><p id="cff30611-4022-4f69-a32a-5d1bcb903158" class="">Let&#x27;s remember that our overarching theme of the course, is <mark class="highlight-yellow_background">to understand what it takes for two hosts to exchange data.</mark> In this lecture, we will zoom into the protocols that we need so that data can travel over a good path from the source to the destination within a single administrative domain. We’ll learn about the two flavors of <mark class="highlight-yellow_background">intradomain routing algorithms </mark>which are the link-state and distance-vector algorithms. We’ll look at <mark class="highlight-yellow_background">example protocols such as RIP and OSPF</mark>. We will also look at <mark class="highlight-yellow_background">challenges that intradomain routing protocols face</mark> such as convergence delay. Finally, we will look at how routing protocols are used for purposes that go beyond determining a good path; <mark class="highlight-yellow_background">how we can use routing for traffic engineering purposes </mark>so that we can steer traffic through the network avoiding congested links for example.</p><p id="d6bec29c-a1e8-4372-9e77-4c8046a031d0" class="">
+</p><p id="f9d1fc6e-8e9a-4247-b817-918f2139aa1c" class="">
+</p><h1 id="488077e9-5217-4771-88bf-60231c4f2d76" class="block-color-pink">Routing Algorithms</h1><p id="77fa0861-b20f-482e-b35e-1e03cbbeac6e" class="">Let’s assume that we have two hosts that have established a connection between them using TCP or UDP as we saw in the previous lecture.</p><p id="3292f535-704d-4653-87ab-9bc234b37192" class="">Each of the two hosts know the default router (or first-hop router as we say). When a host sends a packet, the packet is first transferred to that default router. But what happens after that? In this lecture we will see <mark class="highlight-yellow_background">the algorithms that we need so that when a packet leaves the default router of the sending host will travel over a path towards the default router of the destination host.</mark></p><p id="3505246b-352a-41cc-a328-595635ff95ef" class="">A packet will be able to travel from the sending host to the destination host with the help of intermediate routers. <mark class="highlight-red">When a packet arrives at a router, the router is responsible to consult a forwarding table and then to determine the outgoing link interface to forward the packet</mark>. <mark class="highlight-yellow_background">So by </mark><mark class="highlight-yellow_background"><strong>forwarding</strong></mark><mark class="highlight-yellow_background"> we refer to transferring a packet from an incoming link to an outgoing link within a single router.</mark> We will talk about forwarding in a following lecture.</p><p id="c15ca9f7-2fe3-4d8d-9455-6f74c5989eeb" class=""><mark class="highlight-yellow_background">By </mark><mark class="highlight-yellow_background"><strong>routing </strong></mark><mark class="highlight-yellow_background">we refer to how routers work together using routing protocols to determine the good paths (or good routes as we call them) over which the packets travel from the source to the destination node.</mark></p><p id="df9f8708-e6b8-4b6e-8453-0661d062acfa" class="">When we have routers that belong to the same administrative domain we refer to the routing that takes place as <mark class="highlight-yellow_background">intradomain routing</mark>.</p><p id="a10f19fc-5f93-445a-bbb8-5711f9ed386c" class="">But when the routers belong to different administrative domains, we refer to <mark class="highlight-yellow_background">interdomain routing</mark>.</p><p id="167efd99-5dee-4d7f-9524-a3daf36cb19f" class="">In this lecture we focus on <mark class="highlight-yellow_background"><strong>intradomain routing algorithms or </strong></mark><mark class="highlight-yellow_background">Interior Gateway Protocols (IGPs)</mark>.</p><p id="cc213316-0721-4101-b8b3-a1399a2a0e51" class="">The two major classes of algorithms that we have are: A) <mark class="highlight-yellow_background">link-state</mark> and B) <mark class="highlight-yellow_background">distance-vector algorithms</mark>. For the following algorithms we represent each router as a node, and a link between two routers as an edge. Each edge is associated with a cost.</p><p id="0d926ac9-52fd-42ea-aa2b-4d3d6ed7966e" class="">
+</p><p id="4852817f-8755-42e7-af91-74a28b71d80d" class="">
+</p><h1 id="ac001406-2370-422e-9066-df4d22af4866" class="block-color-pink">Linkstate Routing Algorithm</h1><p id="2dae580d-3123-4c1a-8fcd-f0766676f557" class="">In this topic, we will talk about the link state routing protocols, and more specifically about the Dijkstra’s algorithm.</p><p id="caa9afb9-b5ab-4557-b65e-93d3d8f22af2" class="">In the linkstate routing protocol, <mark class="highlight-yellow_background">the link costs and the network topology are known to all nodes</mark> (for example by broadcasting these values).</p><p id="10c024a4-1cf2-42b2-8f36-5f37a3b400a7" class="">Let’s introduce some basic terminology. By<mark class="highlight-yellow_background"> </mark><mark class="highlight-yellow_background"><strong>u </strong></mark>we represent <mark class="highlight-red">our source node</mark>. By<mark class="highlight-yellow_background"> </mark><mark class="highlight-yellow_background"><strong>v </strong></mark>we present <mark class="highlight-red">every other node in the network</mark>. By<mark class="highlight-yellow_background"> </mark><mark class="highlight-yellow_background"><strong>D(v)</strong></mark><mark class="highlight-yellow_background"> </mark>we represent <mark class="highlight-red">the cost of the current least cost path from u to v</mark>. By<mark class="highlight-yellow_background"> </mark><mark class="highlight-yellow_background"><strong>p(v)</strong></mark><mark class="highlight-yellow_background"> </mark>we present <mark class="highlight-red">the previous node along the current least cost path from u to v</mark>. By<mark class="highlight-yellow_background"> </mark><mark class="highlight-yellow_background"><strong>N’</strong></mark><mark class="highlight-yellow_background"> </mark>we represent <mark class="highlight-red">the subset of nodes along the current least-cost path from u to v</mark>.</p><p id="658b2a67-92c4-4ce4-a595-ef81f07401fd" class=""><mark class="highlight-teal_background"><strong>Initialization step.</strong></mark><mark class="highlight-teal_background"> </mark>We note that the algorithm starts with an initialization step, where we initialize all the currently known least-cost paths from u to its directly attached neighbors. We know these costs because they are the costs of the immediate links. For nodes in the network that they are not directly attached to u, we initialize the cost path as infinity. We also initialize the set N&#x27; to include only the source node u.</p><figure id="24a9e1fe-46ae-4fdc-a9dc-d4d3482f272d" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled.png"><img style="width:1920px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled.png"/></a></figure><p id="70c60e9c-bde3-4460-8676-795ebdec597c" class=""><mark class="highlight-teal_background"><strong>Iterations</strong></mark><mark class="highlight-teal_background">. </mark>After the initialization step, the algorithm follows with a loop that is executed for every destination node v in the network. <mark class="highlight-red">At each iteration, we look at the set of nodes that are not included in N’, and we identify the node (say w) with the least cost path from the previous iteration</mark>. We add that node w into N’. For every neighbor v of w, we update D(v) with the new cost which is either the old cost from u to v (from the previous iteration) or the known least path cost from source node u to w, plus the cost from w to v, <mark class="highlight-red">whichever between the two quantities is the minimum.</mark></p><p id="7cb6e406-3f42-4168-a28c-847e37c9a764" class=""><mark class="highlight-red">The algorithm exits by returning the shortest paths, and their costs</mark>, from the source node u to every other node v in the network.</p><p id="74ef07b5-ea43-4c9c-a263-96e2aa1623d1" class="">
+</p><p id="1b404535-44dc-4ebf-9b03-34d60ae1a248" class="">
+</p><h1 id="b3dfffdb-1268-4a3b-ae09-34310e2f798a" class="block-color-pink">Linkstate Routing Algorithm - Example</h1><p id="0ef541a8-942e-4de6-a45d-055f2271763b" class="">Let’s look at an example of the linkstate routing algorithm. We have the graph below and we consider our source node to be u. <mark class="highlight-yellow_background">Our goal is to compute the least-cost paths from u to all nodes v in the network.</mark></p><figure id="355dde46-ad69-45db-b3a6-d112d5a9588a" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%201.png"><img style="width:670px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%201.png"/></a></figure><p id="8571f7ce-4517-4f4e-8d8f-1dc3aaed66f5" class="">We start with <mark class="highlight-yellow_background">the initialization step, where we set all the currently known least-cost paths from u to it’s directly attached neighbors v, x and w.</mark> <mark class="highlight-red">For the rest of the nodes in the network we set the cost to infinity,</mark> because they are not immediate neighbors to source node u. We <mark class="highlight-red">also initialize the set N&#x27; to include only the source node u</mark>. The first row in our table represents the initialization step.</p><p id="c10dcb7c-03ec-4b3e-ba7a-40d8413882fb" class="">In the first iteration, we look among the nodes that are not yet in N’, and we select the node with the least cost from the previous iteration. In this case, this is node x. Then we update D for all the immediate neighbors of x, which in this case are nodes v and w. For example, we update D(w) as the minimum between: the cost we had from the previous iteration which is 5, and the cost from u to x (1) plus cost from x to w (3). The minimum between the two is 4. We update the second row in our table.</p><p id="a889ce9a-3008-4fc5-8508-d093bd008180" class="">We continue in a similar manner for the rest of the nodes in the table. The algorithm exits in the 5th iteration.</p><figure id="11e9be55-113f-4491-9b37-f6deb9efcf4c" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%202.png"><img style="width:1328px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%202.png"/></a></figure><p id="7c7ea8fb-f31f-429e-8edd-781474ec3de1" class="">
+</p><p id="a94afdbf-8c1a-4feb-92a9-c05fa4c76063" class="">
+</p><h1 id="360e1d5b-4faf-4084-b336-b2608d23a84a" class="block-color-pink">Linkstate Routing Algorithm - Computational Complexity</h1><p id="995eefbc-ca77-4f26-a8c8-c2ed4efc8666" class="">What is the computational complexity of the linkstate routing algorithm?</p><p id="1e7cfdf6-2455-4320-beb8-125206d12131" class="">In other words, in the worst case, how many computations are needed to find the least-cost paths from the source to all destinations in the network? <mark class="highlight-red">In the first iteration we need to search through all nodes to find the node with the minimum path cost</mark>. But as we proceed in the next iterations, this number decreases. So <mark class="highlight-red">in the second iteration we search through (n-1) nodes</mark>. This decrease continues at every step. So by the end of the algorithm, after we go through all the iterations, we will need to s<mark class="highlight-red">earch through n(n+1)/2 nodes</mark>. <mark class="highlight-yellow_background">Thus the complexity of the algorithm is in the order of n squared O(n^2).</mark></p><p id="7322e768-2c40-4808-9f17-e5b1c53a6290" class="">
+</p><p id="c1ac8224-f0c4-4c4e-bf88-dc9667008054" class="">
+</p><h1 id="02e7899b-2da1-4773-8fe9-4a4606eab8bd" class="block-color-pink">Distance Vector Routing</h1><p id="a1a6108e-f2fa-4991-9bb0-90760ba995e2" class="">In this section, we will talk about the distance vector routing algorithm.</p><p id="20af761b-e9d8-47d8-85d6-c0f694fb7e2f" class=""><mark class="highlight-yellow_background">The DV routing algorithm is iterative</mark> (the algorithm iterates until the neighbors do not have new updates to send to each other), <mark class="highlight-yellow_background">asynchronous</mark> (<mark class="highlight-red">the algorithm does not require the nodes to be synchronized with each other</mark>), and <mark class="highlight-yellow_background">distributed</mark> (<mark class="highlight-red">direct nodes send information to one another,</mark> and then they <mark class="highlight-red">resend their results back</mark> after performing their own calculations, so the calculations are not happening in a centralized manner).</p><p id="e0e18d03-fda2-4c74-9671-50b848957265" class="">The DV algorithm <mark class="highlight-yellow_background">is based on the Bellman Ford Algorithm</mark>. <mark class="highlight-red">Each node maintains its own distance vector, with the costs to reach every other node in the network</mark>. Then, <mark class="highlight-yellow_background">from time to time, each node sends its own distance vector to its neighbor nodes</mark>. The neighbor nodes in turn, receive that distance vector and they use it to update their own distance vectors. In other words, <mark class="highlight-yellow_background">the neighboring nodes exchange their distance vectors to update their own view of the network.</mark></p><p id="80256c9c-fd2d-47f4-8602-b2749a18504f" class="">How the vector update is happening? Each node x updates its own distance vector using the <mark class="highlight-blue_background">Bellman Ford equation: Dx(y) = minv{c(x,v) + Dv(y)}</mark> for each destination node y in the network. A node x, computes the least cost to reach destination node y, by considering the options that it has to reach y through each of its neighbor v. <mark class="highlight-red">So node x considers the cost to reach neighbor v, and then it adds the least cost from that neighbor v to the final destination y</mark>. <mark class="highlight-yellow_background">It calculates that quantity over all neighbors v and it takes the minimum.</mark></p><figure id="5c8716fe-18bc-4b54-8233-a93a688f8f6d" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%203.png"><img style="width:669px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%203.png"/></a></figure><p id="b310482c-04ba-4dcb-8497-8f51f55d8476" class="">Formally, the DV algorithm is as follows:</p><figure id="223a045e-ed3a-4885-934d-b85a30a3e142" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%204.png"><img style="width:666px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%204.png"/></a></figure><p id="f1902716-cf7d-4d0f-9535-ab14bb89e7c0" class="">
+</p><p id="e962c38c-5324-40d7-b51e-b793bc247f18" class="">
+</p><h1 id="bd7d3e6d-5f6e-41bd-8194-9a249474d53f" class="block-color-pink">Distance Vector Routing Example</h1><p id="22b04c7f-ef41-4e24-ae9f-0776a911dbd5" class="">Now, let’s see an example of the distance vector routing algorithm. Let’s consider the three node network shown here:</p><figure id="9d907ec1-fabe-4c63-a9c9-e9cfedcc9903" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%205.png"><img style="width:668px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%205.png"/></a></figure><p id="f2e13efd-93a3-4f25-8ee5-0d47a569a9cf" class=""><mark class="highlight-yellow_background">In the first iteration, each node has its own view of the network, which is represented by an individual table</mark>. Every row in the table is the distance vector of each node. Node x has it’s own table, and the same is true for nodes y and z. We note that in the first iteration, node x does not have any information about the y’s and z’s distance vectors, thus these values are set to infinity.</p><p id="2713a0b2-fb91-4a2c-8729-2bb55956cb4a" class=""><mark class="highlight-yellow_background">In the second iteration, the nodes exchange their distance vectors and they update their individual views of the network.</mark></p><p id="52f21d18-8315-4742-9278-6baaf3defb98" class="">Node x computes its new distance vector, <mark class="highlight-yellow_background">using the Bellman Ford equation for every destination node y and z</mark>. For each destination, node x compares the cost to reach that destination through a neighbor node.</p><p id="1d7de726-caac-48a2-bc44-f7dbc74851f2" class="">dx(y) = min{c(x,y) + dy(y), c(x,z)+dz(y) } = min{2+0, 7+1} = 2</p><p id="298fcf1d-08bb-466b-b715-53d2ab02c858" class="">dx(z) = min{c(x,y) + dy(z), c(x,z)+dz(z) } = min{2+1, 7+0} = 3</p><p id="0b90bb03-2c83-4493-8bba-eda9451dd4dc" class=""><mark class="highlight-yellow_background">At the same time, node x receives the distance vectors from y and z from the first iteration.</mark> So <mark class="highlight-red">it updates its table to reflect its view of the network accordingly</mark>.</p><p id="d49e25d6-7771-4878-9156-c936ccd92d44" class="">Nodes y and z repeat the same steps to update their own tables.</p><figure id="c1a0c320-6a99-4af3-bdd3-312fefe54b99" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%206.png"><img style="width:666px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%206.png"/></a></figure><p id="e62cb84a-c6bf-4f94-b72e-6e838d4648b0" class=""><mark class="highlight-yellow_background">In the third iteration, the nodes get the distance vectors from the previous iteration</mark> (if they have changed), a<mark class="highlight-yellow_background">nd they repeat the same calculations.</mark> Finally, <mark class="highlight-red">each node has its own routing table</mark>.</p><figure id="c3a133ac-6a85-45ee-8295-4b4780ca0aa8" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%207.png"><img style="width:669px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%207.png"/></a></figure><p id="41d7ae3b-fec3-4a7e-a5cc-6e92267a3721" class="">Finally, at this point, there are no further updates send from the nodes, thus the nodes are not doing any further calculations on their distance vectors. <mark class="highlight-yellow_background">The nodes enter a waiting mode, until there is a change in the link costs.</mark></p><p id="68b44b2b-e801-4bf5-bf3a-73d216ae7bf1" class="">
+</p><p id="d79748e5-5887-49d8-8e4e-bcfa4581f2a9" class="">
+</p><h1 id="482bd554-0c9b-401c-b28e-d153296fc3ac" class="block-color-pink">Link Cost Changes and Failures in DV - Count to Infinity Problem</h1><p id="2e8d83a5-5dc3-4038-a122-71b1dc339049" class="">Now, we will see what is happening when a node identifies that a link that it is connecting it to one of its neighbors as changed.</p><p id="b4f5e0f4-96e1-47a2-aa79-6b2089b26c3b" class="">Let’s consider the following example topology below:</p><figure id="44dda6b4-3388-4402-82a3-498498819dcc" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%208.png"><img style="width:666px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%208.png"/></a></figure><p id="bd884f05-fa58-4e68-9b37-b3d77901efbd" class="">Let&#x27;s assume that the link cost between x-y changes to 1.</p><p id="24061b85-c966-4655-ade3-8be82798aaee" class="">1. At time t0, y detects that cost to x has changed from 4 to 1, so it updates its distance vector and sends it to its neighbors.</p><ol id="e8591eac-5ee1-4448-9163-00063e00825e" class="numbered-list" start="1"><li>At time t1, z receives the update from y. Now it thinks that is can reach x through y with a cost of 2. And it sends its new distance vector to its neighbors.</li></ol><ol id="95afeb14-3d5e-4e71-a1c9-8ca6974c6263" class="numbered-list" start="2"><li>At time t2, y receives update from z. Y distance vector does not change its distance vector and does not send updates.</li></ol><p id="492e5637-ea70-4db8-a981-f6df2f267bec" class="">In this scenario, we note that the fact that <mark class="highlight-red">there was a decrease in the link cost, it propagated quickly among the nodes</mark>, as it only took a few iterations.</p><p id="6306d8f8-f529-4165-b86e-422e56630be4" class="">Unfortunately, <mark class="highlight-red">this is not always the case</mark>. <mark class="highlight-yellow_background">Let’s consider the following scenario where a link cost increases by a large amount.</mark></p><figure id="0b2dbde6-ce84-4a82-bae8-7631a6198637" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%209.png"><img style="width:668px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%209.png"/></a></figure><p id="f8a33e4e-c754-4e32-821a-3035e5fd64e1" class="">Let’s assume that the link y-x has a new cost of 60.</p><ol id="f017633c-2964-42af-b8e2-a34f50bb33e7" class="numbered-list" start="1"><li>At t0 y detects that cost has changed, now it will update its distance vector thinking that it can still reach x through z with a total cost of 5+1=6</li></ol><ol id="ed7ba433-f391-49da-b764-e2b7cefd644b" class="numbered-list" start="2"><li>At t1, we have a routing loop, where z thinks it can reach x through y and y thinks it can reach x through z. This will be causing the packets to be bouncing back and forth between y and z until their tables change.</li></ol><ol id="1a707fac-9164-4238-9899-c1cdd818c0fb" class="numbered-list" start="3"><li>z and y keep updating each other about their new cost to reach x. For example, y computes its new cost to be 6, it informs z. Then z computes its new cost to be 7, and it informs y, and so on.</li></ol><p id="46b91836-321e-4c60-a3a4-3020948b212a" class=""><mark class="highlight-yellow_background">This back and forth continues for a total of 44 iterations</mark>, at which point z computes its cost to be larger than 50, and that point it will prefer to reach x directly rather than through y.</p><p id="28403cef-7577-4394-8c1f-15a96e0386d5" class=""><mark class="highlight-yellow_background">In contrast to the previous scenario, this link cost change took a long time to propagate among the nodes of the network</mark>. This is <mark class="highlight-red">known as the count-to-infinity problem</mark>.</p><p id="bea31749-b6e6-423f-b806-2468a42eb23a" class="">
+</p><p id="4cce3616-4a16-41fc-bebb-771442d60eca" class="">
+</p><h1 id="d0ac274a-8708-45f9-8461-519af4ffe6d4" class="block-color-pink">Poison Reverse</h1><figure id="5d4633cc-4bdf-4009-b598-69388ae3b533" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2010.png"><img style="width:1920px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2010.png"/></a></figure><p id="0c399094-44f8-402c-98aa-d0a40b3047c6" class="">A solution to the previous problem is the following idea, called poison reverse: since z reaches x through y, z will advertise to y that the distance to x is infinity (Dz(x)=infinity). However z knows that this is not true and Dz(x)=5. z tells this lie to y, as long as it knows that it can reach to x via y. <mark class="highlight-red">Since y assumes that z has no path to x except via y, it will never send packets to x via z</mark>.</p><p id="feb6e17a-c136-4922-bdb8-7c603e1264c7" class="">So z poisons the path from z to y.</p><p id="ff2ed1c5-bec9-4f63-ad83-80fde38445e3" class="">Things change when the cost from x to y changes to 60. y will update its table and send packet to x directly with cost Dy(x)=60. It will inform z about its new cost to x, after this update is received. Then z will immediately shift its route to x to be via the direct (z,x) link at cost 50. Since there is a new path to x, z will inform y that Dz(x)=50.</p><p id="4f87d2f6-f60e-4477-be55-62ec67564b0c" class="">When y receives this update from z, y will update Dy(x)=51=c(y,z)+Dz(x).</p><p id="fc19880f-2130-45bb-978a-f4f7229a5ea2" class="">Since z is now on least cost path of y to reach x, y poisons the reverse path from z to x by. Y tells z that Dy(x)=inf, even though y knows that Dy(x)=51.</p><p id="9f5d99ec-8b2d-4569-aab8-65f5c901d9cf" class=""><mark class="highlight-yellow_background">This technique will solve the problem with 2 nodes, however poisoned reverse will not solve a general count to infinity problem involving 3 or more nodes that are not directly connected.</mark></p><p id="fce2f0d5-0835-4625-9694-2ebe9c54bdbe" class="">
+</p><p id="6e8e70c6-b6f2-4d23-9e7a-06870f6f8300" class="">
+</p><h1 id="11ddffc2-ef28-4b96-b494-3038a7d7b636" class="block-color-pink">Distance Vector Routing Protocol Example: RIP</h1><p id="b2d89a43-559c-4e97-bd5e-e48d85d20ad4" class="">The <strong>Routing Information Protocol (RIP)</strong> is <mark class="highlight-yellow_background">based on the Distance Vector protocol</mark>.</p><p id="472e9d55-118b-4f2d-a515-97013c706ce2" class=""><mark class="highlight-yellow_background">The first version</mark>, released as a part of the BSD version of Unix, <mark class="highlight-yellow_background">uses hop count as a metric</mark> (i.e. assumes link cost as 1). The metric for choosing a path could be shortest distance, lowest cost or a load-balanced path. <mark class="highlight-yellow_background">In RIP, routing updates are exchanged between neighbors periodically, using a RIP response message, as opposed to distance vectors in the DV Protocols</mark>. These messages, called <mark class="highlight-red">RIP advertisements</mark>, contain information about sender’s distances to destination subnets.</p><p id="c323f44a-7de5-415e-b2f6-4fcb1f62a797" class="">Let’s look at a simple RIP example to illustrate how it works. The figure below shows a portion of the network. Here, A, B, C and D denote the <mark class="highlight-red">routers</mark> and w, x, y and z denote the <mark class="highlight-red">subnet masks</mark>.</p><figure id="4c036dcf-303d-4179-98a4-4b2d0c4f4a91" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2011.png"><img style="width:1920px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2011.png"/></a></figure><p id="305a1992-4191-4936-bd63-c36f8469f88c" class=""><mark class="highlight-yellow_background">Each router maintains a </mark><mark class="highlight-yellow_background"><strong>routing table</strong></mark>, <mark class="highlight-red">which contains its own distance vector as well as the router&#x27;s forwarding table</mark>. If we have a look at the routing table of Router D, we will see that it has three columns: destination subnet, identification of the next router along the shortest path to the destination, and the number of hops to get to the destination along the shortest path. A routing table will have one row for each subnet in the AS.</p><figure id="3dcfee7f-20c6-494e-9ffa-d98d07499033" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2012.png"><img style="width:1920px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2012.png"/></a></figure><p id="8f0a4d69-f03c-48de-b818-bcc48675cc8e" class="">For this example, the table in the above figure indicates that to send a datagram from router D to destination subnet w, the datagram should first be forwarded to neighboring router A; the table also indicates that destination subnet w is two hops away along the shortest path. Now if router D receives from router A the advertisement (the routing table information of router A) shown in the figure below it merges the advertisement with the old routing table.</p><figure id="a302ef33-7f93-4c51-bb67-530f8964122e" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2013.png"><img style="width:1920px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2013.png"/></a></figure><p id="7ccb0565-00c2-4130-9727-b11f6857b485" class="">In particular, router D learns that there is now a path through router A to subnet z that is shorter than the path through router B. Therefore, router D updates its table to account for the new shortest path. The updated routing table is shown in the figure below. As the Distance Vector algorithm is in the process of converging or as new links or routers are getting added to the AS, the shortest path is changing.</p><figure id="0123b0e0-1729-4529-9f09-4fa19a47a4eb" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2014.png"><img style="width:1920px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2014.png"/></a></figure><p id="06e0e744-2008-4c39-a125-66291aa2cda8" class=""><mark class="highlight-yellow_background">Each node maintains a RIP Table (Routing Table), which will have one row for each subnet in the AS</mark>. RIP version 2 allows subnet entries to be aggregated using route aggregation techniques.</p><p id="34643f45-7d0f-4849-9f05-e32399fddf5f" class="">I<mark class="highlight-yellow_background">f a router does not hear from its neighbor at least once every 180 seconds, that neighbor is considered to be no longer reachable </mark>(<mark class="highlight-red">broken link</mark>). In this case, the local routing table is modified and changes are propagated. Routers send request and response messages over UDP, using port number 520, which is layered on top of network-layer IP protocol. <mark class="highlight-yellow_background">RIP is actually implemented as an application-level process.</mark></p><p id="e8a9040f-1024-4be2-a5d2-83ca859020b8" class="">Some of the <mark class="highlight-red">challenges</mark> with RIP include <mark class="highlight-red">updating routes</mark>, <mark class="highlight-red">reducing convergence time</mark>, and <mark class="highlight-red">avoiding loops/count-to-infinity problems</mark>.</p><p id="f6d7ef6f-510c-49a3-b567-a2d9999f67eb" class="">
+</p><p id="cf9f4091-bca4-4bb1-8817-977dd261a118" class="">
+</p><h1 id="47af1274-a9be-4d0e-8eb0-9e23f8f6d8be" class="block-color-pink">Linkstate Routing Protocol Example: OSPF</h1><p id="733e11b4-aa1c-4561-84c8-01266c58c299" class="block-color-pink_background"><strong>Open Shortest Path First (OSPF)</strong> </p><p id="67045bea-196d-48c8-9888-c5c86ef4cc11" class="">is a routing protocol which <mark class="highlight-yellow_background">uses a link state routing algorithm to find the best path between the source and the destination router</mark>. <mark class="highlight-red">OSPF was introduced as an advancement of the RIP Protocol</mark>, operating in upper-tier ISPs. It is a link-state protocol that <mark class="highlight-yellow_background">uses flooding of link-state information and a Dijkstra least-cost path algorithm</mark>. <mark class="highlight-red">Advances include authentication of messages exchanged between routers</mark>, <mark class="highlight-red">the option to use multiple same cost paths</mark>, and <mark class="highlight-red">support for hierarchy within a single routing domain</mark>.</p><p id="c29b2b26-7943-440e-9333-c2f07b1592c3" class="">As we have seen already, a link state routing algorithm is <mark class="highlight-yellow_background">a dynamic routing algorithm</mark> in which <mark class="highlight-red">each router shares knowledge of its neighbors</mark> with every other router in the network. The network topology that is built as a result can be viewed as a directed graph with preset weights for each edge assigned by the administrator.</p><p id="19befbf5-b2f3-4685-9338-ce766996607d" class="block-color-pink_background"><strong>Hierarchy.</strong> </p><p id="b486ed6e-ce6c-4b25-bebd-9f5d9bea8a9b" class="">An OSPF autonomous system can be configured hierarchically into areas. Each area runs its own OSPF link-state routing algorithm, with each router in an area broadcasting its link state to all other routers in that area. <mark class="highlight-yellow_background">Within each area, one or more area border routers are responsible for routing packets outside the area.</mark></p><p id="96edcd8e-e7de-4fa7-b3f3-c9df5e35fd41" class=""><mark class="highlight-yellow_background">Exactly one OSPF area in the AS is configured to be the backbone area</mark>. The primary role of the backbone area is <mark class="highlight-red">to route traffic between the other areas in the AS</mark>. The backbone <mark class="highlight-red">always contains all area border routers in the AS</mark> and <mark class="highlight-red">may contain non-border routers as well</mark>.</p><p id="bae11237-5cc1-404f-984f-6dd5f775d343" class="">For packets routing between two different areas, it is required that the packet be sent through an area border router, <mark class="highlight-red">through the backbone</mark> and then to the area border router within the destination area, before finally reaching the destination.</p><p id="64bce42d-ac40-40af-bf8b-9c9b5985ded1" class="block-color-pink_background"><strong>Operation.</strong> </p><p id="ad472e60-c428-4747-996d-ce3d61c9189a" class="">First, <mark class="highlight-red">a graph (topological map) of the entire AS is constructed</mark>. Then, <mark class="highlight-yellow_background">considering itself as the root node, each router computes the shortest-path tree to all subnets</mark>, by running Djikstra’s algorithm locally. <mark class="highlight-red">The link costs have been pre-configured by a network administrator</mark>. The administrator has a variety of choices while configuring the link costs. For instance, he may choose to set them to be inversely proportional to link capacity, or set them all to one. Given set of link weights, <mark class="highlight-red">OSFP provides the mechanisms for determining least-cost path routing</mark>.</p><p id="596863fb-77d3-4f82-9745-ec97003b6405" class=""><mark class="highlight-yellow_background">Whenever there is a change in a link’s state, the router broadcasts routing information to all other routers in the AS, not just to its neighboring routers</mark>. It <mark class="highlight-red">also broadcasts a link’s state periodically even if its state hasn’t changed.</mark></p><p id="b85f2c1e-9ef6-484e-873a-66ec9d6f6b2f" class="block-color-pink_background"><strong>Link State Advertisements.</strong> </p><p id="28627ad3-dbb4-47bb-8a24-08020688bfe0" class="">Every router within a domain that operates on OSPF uses Link State Advertisements (LSAs). <mark class="highlight-yellow_background">LSA communicates the router&#x27;s local routing topology to all other local routers in the same OSPF area</mark>. In practice, LSA is <mark class="highlight-red">used for building a database</mark> (called the <mark class="highlight-orange_background">link state database</mark>) containing all the link states. LSAs are typically flooded to every router in the domain. This <mark class="highlight-red">helps form a consistent network topology view</mark>. <mark class="highlight-orange_background">Any change in the topology requires corresponding changes in LSAs</mark>.</p><p id="2dfedc61-761d-449d-b0b2-dda5cca3e4fb" class="block-color-pink_background"><strong>Refresh rate for LSAs. </strong></p><p id="6cb74985-7feb-4dd7-9b5a-faa5b8bf4fad" class="">OSPF typically has a refresh rate for LSAs, which has <mark class="highlight-yellow_background">a default period of 30 minutes</mark>. If a link comes alive before this refresh period is reached, they routers connected to that link ensure LSA flooding. Since the process of flooding can happen multiple times, <mark class="highlight-orange_background">every router receives multiple copies of refreshes or changes</mark> - and stores the first received LSA change as <mark class="highlight-orange_background">new</mark>, and the subsequent ones as <mark class="highlight-orange_background">duplicates</mark>.</p><p id="991b60df-27b3-4171-893b-d3f0bc428a5d" class="">
+</p><p id="db4965c7-3541-4a84-bc3c-3e076221e9b2" class="">
+</p><h1 id="aa4c6911-7e7d-499f-ba7d-a9b31acf9674" class="block-color-pink">Processing OSPF Messages in the Router</h1><p id="85a8e254-32e8-4ff3-b027-f962e0459283" class="">In the previous section, we looked at OSPF fundamentals and how it operates using Link State Advertisements (LSA). In this section we will look at how the OSPF messages are processed in the router in more detail.</p><figure id="1f5e5aaf-f572-4877-9de1-1f9e631f0681" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2015.png"><img style="width:960px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2015.png"/></a></figure><p id="123e6d23-eb67-493a-8d12-1cf005fca7dc" class="">To do this, let’s begin with a simple model of a router given in the figure above. The router consists of <mark class="highlight-orange_background">a route processor</mark> (which is the main processing unit) and interface cards that receive data packets which are forwarded via a switching fabric. Let us break down router processing in a few steps:</p><ol id="f44d04df-571d-4157-bf8a-f6a80607b6f6" class="numbered-list" start="1"><li><mark class="highlight-yellow_background">Initially, the LS update packets which contain LSAs from a neighboring router reaches the current router’s OSPF (which is the route processor)</mark>. This is the first trigger for the route processor. As the LS Updates reach the router, <mark class="highlight-red">a consistent view of the topology is being formed</mark> and this information is stored in the link-state database. Entries of LSAs correspond to the topology which is actually visible from the current router.</li></ol><ol id="c196e933-2e52-43c0-b620-5c76bafe81bd" class="numbered-list" start="2"><li><mark class="highlight-yellow_background">Using this information from the link-state database, the current router calculates the shortest path using shortest path first (SPF) algorithm</mark>. The result of this step i<mark class="highlight-red">s fed to the Forwarding Information Base (FIB)</mark></li></ol><ol id="12aab42e-b3b1-4273-8188-d947c8cc0951" class="numbered-list" start="3"><li><mark class="highlight-yellow_background">The information in the FIB is used when a data packet arrives at an interface card of the router,</mark> where <mark class="highlight-red">the next hop for the packet is decided and its forwarded to the outgoing interface card.</mark></li></ol><p id="44e0e3ef-f22f-42e8-8516-a128545915a0" class="">To further understand OSPF processing, let&#x27;s look at the following flow chart and view it in time slices (T1, T2, …, T7).</p><figure id="b5a1ff66-b2be-45bb-bbeb-d3d938adad9b" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2016.png"><img style="width:669px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2016.png"/></a></figure><figure id="5660c9fa-956b-4d3e-8a46-e33f14ecac20" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2017.png"><img style="width:668px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2017.png"/></a></figure><p id="4f630da9-d8e4-488f-8c0f-324c61a294f3" class="">We’ve already noted that the processing tasks begin at the receipt of an LS update packet <mark class="highlight-orange_background"><strong>(T1)</strong></mark>. <mark class="highlight-yellow_background">For every LSA unpacked from the update packet, the OSPF protocol checks whether it is a new or a duplicate LSA</mark>. This <mark class="highlight-red">is done by referring to the link-state database</mark>, and checking for the sequence number of the LSA to a matching LSA instance in the database. <mark class="highlight-yellow_background">For every new LSA, the database is updated, an SPF calculation is scheduled</mark> <mark class="highlight-orange_background"><strong>(T2)</strong></mark> and it’s determined which interface the LSA needs to be flooded out of. In modern routers, the when of LSA flooding can be based on a timer.</p><p id="72315665-0edb-4fc8-8748-a908c88dd7d8" class=""><mark class="highlight-yellow_background">When all the LSAs from an LS update packet have been processed</mark> <mark class="highlight-orange_background"><strong>(T3)</strong></mark>, <mark class="highlight-yellow_background">the LSAs are prepared and flooded out as an LS Update packet to the next router</mark> <mark class="highlight-orange_background"><strong>(T4)</strong></mark><strong>.</strong> After this, we move on to the <mark class="highlight-yellow_background">actual execution of SPF calculation within the router</mark> <mark class="highlight-orange_background"><strong>(T5 and T6)</strong></mark>. Since SPF calculation is a CPU-intensive task, SPF calculations are scheduled and carried out over a period of time (usually when LSA’s are changed) so as to offset the CPU costs. After the SPF calculation is completed, <mark class="highlight-yellow_background">the FIB is updated</mark> <mark class="highlight-orange_background"><strong>(T7)</strong></mark><strong>.</strong></p><p id="3e59bdbf-86f1-4854-8b96-85659d301843" class="">
+</p><p id="f974bc75-ae82-45d9-ab84-e130f8f913b9" class="">
+</p><h1 id="7de06f16-faf8-43e8-a0c4-edcb57b133d6" class="block-color-pink">Hot Potato Routing</h1><p id="f56ba980-3d86-48e5-bcd5-50a5a6f3b357" class="">In large networks, routers rely both on interdomain and intradomain routing protocols to route the traffic.</p><p id="37080912-c64f-439a-8053-16b90b9b456d" class="">The routers within the network use the intradomain routing protocols to find the best path to route the traffic within the network. <mark class="highlight-yellow_background">In case when the final destination of the traffic is outside the network, then the traffic will travel towards the networks exit</mark><mark class="highlight-orange_background"> (</mark><strong><mark class="highlight-orange_background">egress points</mark></strong><mark class="highlight-orange_background">) </mark><mark class="highlight-yellow_background">before leaving the network</mark>. In some cases there are multiple egress points that the routers can choose from. These egress points (routers) can be equally good in the sense that they offer similarly good external paths to the final destination.</p><p id="cd9941ed-1f4c-453f-a1cf-de70373413e0" class="">In this case, <mark class="highlight-yellow_background">hot potato routing is a technique/practice of choosing a path within the network</mark>, by <mark class="highlight-red">choosing the closest egress point based on intradomain path cost</mark> (Interior Gateway Protocol/IGP cost).</p><figure id="9b21b29c-b00a-47bc-8c1f-143e45492f17" class="image"><a href="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2018.png"><img style="width:1920px" src="Lesson%203%20Intradomain%20Routing%2024a9e1fe46ae4fdca9dcd4d3482f272d/Untitled%2018.png"/></a></figure><p id="689849d4-3e10-4c7d-84aa-fc19260191e7" class="">Let’s look at an example.</p><p id="aa9804ac-b006-4515-a797-d4b4e9347ff5" class="">In the figure above, we have a network, and specifically we are looking at the a router located in Dallas and the router needs to forward traffic towards a destination. It could do so via New York or San Francisco. We assume that both egress points offer <mark class="highlight-yellow_background">BGP (Border Gateway Protocol) path costs</mark>, so they are <mark class="highlight-red">equally good egress points</mark>. <mark class="highlight-yellow_background">In this case, the router has multiple egress points</mark>. We see that the IGP path cost for SF is 9 while the path cost for NY is 10. Thus, the router uses hot potato routing to choose to send the traffic to the destination via SF.</p><p id="bccee8f5-4759-48b6-b161-bca9f0a0cbe3" class=""><mark class="highlight-yellow_background">Hot potato routing simplifies computations for the routers as they are already aware of the IGP path costs</mark>. It <mark class="highlight-red">makes sure that the path remains consistent</mark>, since the next router in the path will also choose to send the packet to the same egress point.</p><p id="c01f5c9a-216d-4790-9889-a4c02527f272" class="">Hot potato routing <mark class="highlight-red">also effectively reduces the network’s resource consumption</mark> by getting the traffic out as soon as possible.</p><p id="53d34409-dc11-4953-88ff-8b41cc5f4856" class="">
+</p><p id="bd3ac3a9-7f71-413d-87df-f58bb047c6f7" class="">
+</p><p id="b206f672-8f4e-45b3-978b-59969464e7aa" class="">
+</p></div></article></body></html>
